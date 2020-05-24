@@ -1,4 +1,4 @@
 package Presentation;
 
-public class test {
+public class Main {
 }
