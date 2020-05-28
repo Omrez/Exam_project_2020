@@ -2,11 +2,12 @@ package Domain;
 
 import java.sql.*;
 
-public class Driver extends UserAccount {
+public class City {
 
-    String driverName;
+    String cityName;
 
-    public void selectDriver(String sql){
+
+    public void selectCity(String sql){
         String url = "jdbc:sqlserver://LAPTOP-KLTD07BQ\\SQLEXPRESS;databaseName=Dry_Cleaning_Service";
         String user = "sa";
         String password = "root";
@@ -18,10 +19,10 @@ public class Driver extends UserAccount {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                driverName = result.getString("fldName");
+                cityName = result.getString("fldCityName");
                 //jeansPrice = result.getString("fldPrice");
 
-                System.out.println(driverName);
+                //System.out.println(jeansType + " " + jeansPrice);
 
             }
 
