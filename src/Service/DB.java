@@ -20,8 +20,6 @@ public class DB {
         return price;
     }
 
-
-
     public void getLaundry(String sql) {
 
         try {

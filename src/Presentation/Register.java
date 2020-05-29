@@ -83,7 +83,12 @@ public class Register extends Application {
 
 
 
-            /*createLaundry(this.jeans,"Presentation/images/jeans.png",50,330,200,jeansLabel,, 400,220);
+
+
+
+
+
+            /*createLaundry(this.jeans,"Presentation/images/jeans.png",50,330,200,jeansLabel,laundry.getType(), 400,220);
             quantity(jeansQuan, jeansMinus,jeansPlus,550,215, 512,215,625,215);
             laundryPrices(jeansPrice,laundry.getPrice()+" DKK", 680,220);*/
 

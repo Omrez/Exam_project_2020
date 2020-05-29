@@ -32,7 +32,7 @@ public class Partner {
                 partnerName = result.getString("fldName");
                 partnerAddress = result.getString("fldAddress");
 
-                System.out.println(partnerName+"\n"+ partnerAddress);
+                //System.out.println(partnerName+"\n"+ partnerAddress);
 
             }
 
