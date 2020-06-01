@@ -1,6 +1,8 @@
 package Service;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DB {
 
@@ -11,6 +13,21 @@ public class DB {
     String type;
     String price;
 
+    String orderNumber;
+    String orderDate;
+    String orderPrice;
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public String getOrderPrice() {
+        return orderPrice;
+    }
 
     public String getType() {
         return type;
@@ -32,7 +49,30 @@ public class DB {
                 type = result.getString("fldType");
                 price = result.getString("fldPrice");
 
-                System.out.println(type + " " + price);
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getOrder(String sql){
+        try {
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                orderNumber = result.getString("fldOrderNumber");
+                orderDate = result.getString("fldDate");
+                orderPrice = result.getString("fldPrice");
+
+                List array = new ArrayList();
+                array.add(getOrderNumber());
+
+                System.out.println(array);
 
             }
 
