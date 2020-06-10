@@ -1,9 +1,7 @@
 package Presentation;
 import Application.*;
-import Domain.Partner;
-import Service.DB;
+import Domain.Order;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class DriverOrder extends Application {
@@ -26,17 +23,11 @@ public class DriverOrder extends Application {
 
     private int sceneWidth = 1200;
     private int sceneHeight = 900;
+    ArrayList<Order> orderArray;
+    int size = 0;
 
     Button partnerOrders;
     Button centralOrder;
-
-    Label driverName;
-    Label partnerName;
-    Label namePlaceholder;
-    Label partnerCity;
-    Label partnerAddress;
-    Label orderNumber;
-    Label orderDate;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -98,85 +89,52 @@ public class DriverOrder extends Application {
 
     public void orderDetails(){
 
-        DB db = new DB();
-        db.getOrder("select * from tblOrder");
-        System.out.println(db.getOrderNumber());
+        ControllerDriver controller = new ControllerDriver();
+        controller.getOrder();
+        orderArray = controller.orderInfo;
+        System.out.println(orderArray);
 
 
-        AnchorPane[] orderPane = new AnchorPane[4];
+        Label citypPlaceholder;
 
-        Label[] namePlaceholder = new Label[4];
-        Label[] citypPlaceholder = new Label[4];
-        Label[] addressPlaceholder = new Label[4];
-        Label[] orderNumberPlaceholder = new Label[4];
-        Label[] orderDatePlaceholder = new Label[4];
+        for (int i = 0; i < orderArray.size(); i++) {
 
-        Label[] partnerName = new Label[4];
-        Label[] partnerCity = new Label[4];
-        Label[] partnerAddress = new Label[4];
-        Label[] partnerOrder = new Label[4];
-        Label[] partnerOrderDate = new Label[4];
+            AnchorPane orderPane = new AnchorPane();
+            orderPane.setPrefWidth(1120);
+            orderPane.setPrefHeight(70);
+            orderPane.setLayoutX(40);
+            orderPane.setLayoutY(size += 100);
+            orderPane.setStyle("-fx-background-color: red");
 
-        for (int i = 0; i < 4; i++) {
-            orderPane[i] = new AnchorPane();
-            orderPane[i].setPrefWidth(1120);
-            orderPane[i].setPrefHeight(70);
-            orderPane[i].setLayoutX(40);
-            orderPane[i].setLayoutY(i*100);
-            orderPane[i].setStyle("-fx-background-color: red");
+            Label namePlaceholder = new Label("Partner name: " + orderArray.get(i).getPartnerName());
+            namePlaceholder.setLayoutX(25);
+            namePlaceholder.setLayoutY(25);
+            namePlaceholder.setTextFill(Color.BLACK);
+            namePlaceholder.setFont(new Font(16));
 
-            namePlaceholder[i] = new Label("Partner name: ");
-            namePlaceholder[i].setLayoutX(25);
-            namePlaceholder[i].setLayoutY(25);
-            namePlaceholder[i].setTextFill(Color.GRAY);
-            namePlaceholder[i].setFont(new Font(16));
+            citypPlaceholder = new Label("City: " + orderArray.get(i).getCity());
+            citypPlaceholder.setLayoutX(320);
+            citypPlaceholder.setLayoutY(25);
+            citypPlaceholder.setTextFill(Color.BLACK);
 
-            citypPlaceholder[i] = new Label("City: ");
-            citypPlaceholder[i].setLayoutX(320);
-            citypPlaceholder[i].setLayoutY(25);
-            citypPlaceholder[i].setTextFill(Color.GRAY);
+            Label addressPlaceholder = new Label("Address: " + orderArray.get(i).getAddress());
+            addressPlaceholder.setLayoutX(490);
+            addressPlaceholder.setLayoutY(25);
+            addressPlaceholder.setTextFill(Color.BLACK);
 
-            addressPlaceholder[i] = new Label("Address: ");
-            addressPlaceholder[i].setLayoutX(490);
-            addressPlaceholder[i].setLayoutY(25);
-            addressPlaceholder[i].setTextFill(Color.GRAY);
+            Label orderNumberPlaceholder = new Label("Order Number: " + orderArray.get(i).getOrderNumber());
+            orderNumberPlaceholder.setLayoutX(700);
+            orderNumberPlaceholder.setLayoutY(25);
+            orderNumberPlaceholder.setTextFill(Color.BLACK);
 
-            orderNumberPlaceholder[i] = new Label("Order Number: ");
-            orderNumberPlaceholder[i].setLayoutX(700);
-            orderNumberPlaceholder[i].setLayoutY(25);
-            orderNumberPlaceholder[i].setTextFill(Color.GRAY);
-
-            orderDatePlaceholder[i] = new Label("Date: ");
-            orderDatePlaceholder[i].setLayoutX(960);
-            orderDatePlaceholder[i].setLayoutY(25);
-            orderDatePlaceholder[i].setTextFill(Color.GRAY);
-
-            partnerName[i] = new Label("get partner name");
-            partnerName[i].setLayoutX(135);
-            partnerName[i].setLayoutY(25);
-
-            partnerCity[i] = new Label("get city");
-            partnerCity[i].setLayoutX(360);
-            partnerCity[i].setLayoutY(25);
-
-            partnerAddress[i] = new Label("get Address");
-            partnerAddress[i].setLayoutX(560);
-            partnerAddress[i].setLayoutY(25);
-
-            partnerOrder[i] = new Label("get order");
-            partnerOrder[i].setLayoutX(820);
-            partnerOrder[i].setLayoutY(25);
-
-            partnerOrderDate[i] = new Label("get Date");
-            partnerOrderDate[i].setLayoutX(1010);
-            partnerOrderDate[i].setLayoutY(25);
+            Label orderDatePlaceholder = new Label("Date: " + orderArray.get(i).getOrderDate());
+            orderDatePlaceholder.setLayoutX(960);
+            orderDatePlaceholder.setLayoutY(25);
+            orderDatePlaceholder.setTextFill(Color.BLACK);
 
 
-           // System.out.println(i+" = "+orderPane[i].getLayoutY());
-
-
-            root.getChildren().addAll(orderPane[i]);
-            orderPane[i].getChildren().addAll(partnerName[i], namePlaceholder[i],citypPlaceholder[i],partnerCity[i],addressPlaceholder[i],partnerAddress[i],orderNumberPlaceholder[i],partnerOrder[i],orderDatePlaceholder[i],partnerOrderDate[i]);
+            root.getChildren().addAll(orderPane);
+            orderPane.getChildren().addAll(namePlaceholder,citypPlaceholder,addressPlaceholder, orderNumberPlaceholder,orderDatePlaceholder);
         }
 
     }
@@ -196,6 +154,14 @@ public class DriverOrder extends Application {
         lb3.setLayoutY(400);
 
         root.getChildren().addAll(lb1,lb2,lb3);
+    }
+
+    public void showDriver() {
+        try {
+            start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

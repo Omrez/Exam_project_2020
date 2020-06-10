@@ -1,146 +1,214 @@
 package Presentation;
 
-import Domain.Clothing;
-import Service.DB;
 import Application.*;
+import Domain.AutoInsertTextField;
+import Domain.Clothing;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 public class Register extends Application {
     Group root;
 
     private int sceneWidth = 1200;
     private int sceneHeight = 900;
-    private int count;
+    Stage primaryStage;
+    //private int count;
+    private ArrayList<Clothing> clothingArrayList;
+    private ArrayList<String> customerPhoneNo;
+    TextField totalPrices = new TextField();
 
     TextField customerName;
-    TextField customerPhone;
-    Button createOrder;
+    AutoInsertTextField customerPhone = new AutoInsertTextField();
+    Button createOrderBtn;
 
-    ImageView jeans;
-    Label jeansLabel;
-    TextField jeansQuan;
-    Button jeansMinus;
-    Button jeansPlus;
-    Label jeansPrice;
+    AnchorPane content;
+    AnchorPane laundryInfo;
 
-    ImageView jacket;
-    Label jacketLabel;
-    TextField jacketQuan;
-    Button jacketMinus;
-    Button jacketPlus;
-    Label jacketPrice;
+    Label totalPricePlaceholder;
+    Label totalPrice;
 
-    ImageView shirt;
-    Label shirtLabel;
-    TextField shirtQuan;
-    Button shirtMinus;
-    Button shirtPlus;
-    Label shirtPrice;
-
-    ImageView suit;
-    Label suitLabel;
-    TextField suitQuan;
-    Button suitMinus;
-    Button suitPlus;
-    Label suitPrice;
-
-    ImageView carpet;
-    Label carpetLabel;
-    TextField carpetQuan;
-    Button carpetMinus;
-    Button carpetPlus;
-    Label carpetPrice;
+    final ToggleGroup group = new ToggleGroup();
+    RadioButton newCustomer;
+    RadioButton existingCustomer;
+    int priceOfJeans = 70;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-            sceneRoot();
-            customerFields(customerName, 305,100,"Enter customer name","Enter customer name");
+        sceneRoot();
 
-            customerPhone();
-            createOrderBtn();
+        customerInfo();
+        createOrderBtn();
 
-
-            Controller controller = new Controller();
-            controller.initialize();
-
-
-
-
-
-
-
-
-
-
-            /*createLaundry(this.jeans,"Presentation/images/jeans.png",50,330,200,jeansLabel,laundry.getType(), 400,220);
-            quantity(jeansQuan, jeansMinus,jeansPlus,550,215, 512,215,625,215);
-            laundryPrices(jeansPrice,laundry.getPrice()+" DKK", 680,220);*/
-
-            /*
-            createLaundry(jacket,"Presentation/images/jacket.png",40,335,280,jacketLabel,laundry.getJacketType(),400,300);
-            quantity(jacketQuan,jacketMinus,jacketPlus,550,290,512,290,625,290);
-            laundryPrices(jacketPrice,laundry.getJacketPrice()+" DKK",680, 295);
-
-            createLaundry(shirt, "Presentation/images/shirt.png",50,330,360,shirtLabel,laundry.getShirtType(),400,380);
-            quantity(shirtQuan,shirtMinus,shirtPlus,550,370,512,370,625,370);
-            laundryPrices(shirtPrice,laundry.getShirtPrice()+" DKK",680,375);
-
-            createLaundry(suit, "Presentation/images/suit.png",50,330,440,suitLabel,laundry.getSuitType(),400,460);
-            quantity(suitQuan,suitMinus,suitPlus,550,450,512,450,625,450);
-            laundryPrices(suitPrice,laundry.getSuitPrice()+" DKK", 680,455);
-
-            createLaundry(carpet,"Presentation/images/carpet.png",45,330,520,carpetLabel,laundry.getCarpetType(),400,540);
-            quantity(carpetQuan,carpetMinus,carpetPlus,550,530,512,530,625,530);
-            laundryPrices(carpetPrice,laundry.getCarpetPrice()+" DKK",680,535);*/
-
+        content();
 
 
     }
 
     public void sceneRoot(){
-            Stage primaryStage = new Stage();
-            root = new Group();
-            Scene scene = new Scene(root,sceneWidth,sceneHeight, Color.web("#b8cfcc"));
-            primaryStage.setTitle("Dry Cleaning System");
-            primaryStage.setScene(scene);
-            primaryStage.show();
+        primaryStage = new Stage();
+        root = new Group();
+        Scene scene = new Scene(root,sceneWidth,sceneHeight, Color.web("#b8cfcc"));
+        primaryStage.setTitle("Dry Cleaning System");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        totalPricePlaceholder = new Label("Total Price: ");
+        totalPricePlaceholder.setLayoutX(950);
+        totalPricePlaceholder.setLayoutY(300);
+        totalPricePlaceholder.setFont(new Font(22));
+
+        totalPrice = new Label("price");
+        totalPrice.setLayoutX(998);
+        totalPrice.setLayoutY(350);
+        totalPrice.setFont(new Font(22));
+        totalPrice.setTextFill(Color.CORAL);
+
+
+
+        root.getChildren().addAll(totalPricePlaceholder,totalPrice);
     }
 
     public void customerFields(TextField customer, int customerX, int customerY, String customerText, String toolTip){
-            customer = new TextField();
-            customer.setPrefWidth(480);
-            customer.setPrefHeight(50);
-            customer.setLayoutX(customerX);
-            customer.setLayoutY(customerY);
-            customer.setPromptText(customerText);
-            customer.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-            customer.setFocusTraversable(false);
-            customer.setTooltip(new Tooltip(toolTip));
-            customer.setAlignment(Pos.CENTER);
+        //customer = new TextField();
+        customer.setPrefWidth(480);
+        customer.setPrefHeight(50);
+        customer.setLayoutX(customerX);
+        customer.setLayoutY(customerY);
+        customer.setPromptText(customerText);
+        customer.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
+        customer.setFocusTraversable(false);
+        customer.setTooltip(new Tooltip(toolTip));
+        customer.setAlignment(Pos.CENTER);
 
-            root.getChildren().addAll(customer);
+        root.getChildren().addAll(customer);
     }
 
-    public void customerPhone(){
-        customerPhone = new TextField();
+    public void content(){
+        content = new AnchorPane();
+        content.setLayoutX(305);
+        content.setLayoutY(180);
+        content.setPrefWidth(480);
+        content.setPrefHeight(430);
+        //content.setStyle("-fx-background-color: blue;");
+        ControllerPartner controller = new ControllerPartner();
+        controller.getClothing();
+        clothingArrayList = controller.clothingArrayList;
+
+        ScrollPane sp = new ScrollPane();
+        sp.setContent(content);
+        sp.setLayoutX(305);
+        sp.setLayoutY(180);
+        sp.setPrefSize(480,430);
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        for (int i = 0; i < clothingArrayList.size(); i++) {
+            laundryInfo = new AnchorPane();
+            laundryInfo.setPrefWidth(480);
+            laundryInfo.setPrefHeight(80);
+            laundryInfo.setLayoutY(i*100);
+            laundryInfo.setStyle("-fx-background-color: red");
+
+            ImageView logo = new ImageView("Presentation/images/" + clothingArrayList.get(i).getType() + ".png");
+            logo.setLayoutY(5);
+
+            Label laundryType = new Label(clothingArrayList.get(i).getType());
+            laundryType.setLayoutX(80);
+            laundryType.setLayoutY(25);
+
+            TextField laundryQuantity = new TextField("0");
+            laundryQuantity.setLayoutX(195);
+            laundryQuantity.setLayoutY(20);
+            laundryQuantity.setPrefWidth(80);
+            laundryQuantity.setFocusTraversable(false);
+            laundryQuantity.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
+            laundryQuantity.setAlignment(Pos.CENTER);
+
+            Clothing clothingObject = clothingArrayList.get(i);
+
+            Button minus = new Button("-");
+            minus.setLayoutX(150);
+            minus.setLayoutY(20);
+            minus.setPrefWidth(30);
+            minus.setStyle("-fx-background-color: #88ff85");
+            minus.setOnAction(event -> minusQuantity(laundryQuantity, clothingObject));
+
+            Button plus = new Button("+");
+            plus.setLayoutX(290);
+            plus.setLayoutY(20);
+            plus.setPrefWidth(35);
+            plus.setStyle("-fx-background-color: #88ff85");
+
+
+            plus.setOnAction(event -> plusQuantity(laundryQuantity, clothingObject ));
+
+
+
+            Label laundryPrice = new Label("" + clothingArrayList.get(i).getPrice() + "DKK");
+            laundryPrice.setLayoutX(360);
+            laundryPrice.setLayoutY(25);
+
+
+
+            laundryInfo.getChildren().addAll(logo,laundryType,minus,laundryQuantity,plus,laundryPrice);
+            content.getChildren().addAll(laundryInfo);
+        }
+
+
+
+        root.getChildren().addAll(content,sp);
+    }
+
+    private void minusQuantity(TextField source, Clothing clothing) {
+        clothing.setCount(-1);
+        int quantity = clothing.getCount();
+        double priceTest = 0;
+
+        for (int i = 0; i < clothingArrayList.size(); i++) {
+            double test = clothingArrayList.get(i).getCount();
+            double test1 = clothingArrayList.get(i).getPrice();
+            priceTest += test1 * test;
+
+        }
+        source.setText("" + (quantity));
+        totalPrices.setText("" + priceTest );
+
+    }
+
+    private void plusQuantity(TextField source, Clothing clothing) {
+
+        clothing.setCount(1);
+        int quantity = clothing.getCount();
+        double priceTest = 0;
+
+        for (int i = 0; i < clothingArrayList.size(); i++) {
+            double test = clothingArrayList.get(i).getCount();
+            double test1 = clothingArrayList.get(i).getPrice();
+            priceTest += test1 * test;
+
+        }
+        source.setText("" + (quantity));
+        totalPrices.setText("" + priceTest);
+
+        totalPrice.textProperty().bind(totalPrices.textProperty());
+
+
+    }
+
+    public void customerInfo(){
         customerPhone.setLayoutX(305);
-        customerPhone.setLayoutY(640);
+        customerPhone.setLayoutY(100);
         customerPhone.setPrefWidth(480);
         customerPhone.setPrefHeight(50);
         customerPhone.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
@@ -148,6 +216,7 @@ public class Register extends Application {
         customerPhone.setFocusTraversable(false);
         customerPhone.setTooltip(new Tooltip("Enter customer phone number"));
         customerPhone.setAlignment(Pos.CENTER);
+
 
         customerPhone.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -159,101 +228,105 @@ public class Register extends Application {
             }
         });
 
-        root.getChildren().addAll(customerPhone);
+        newCustomer = new RadioButton("New Customer");
+        newCustomer.setToggleGroup(group);
+        newCustomer.setSelected(true);
+        newCustomer.setLayoutX(810);
+        newCustomer.setLayoutY(100);
+        existingCustomer = new RadioButton("Existing Customer");
+        existingCustomer.setToggleGroup(group);
+        existingCustomer.setLayoutX(810);
+        existingCustomer.setLayoutY(125);
+        existingCustomer.setOnAction(event -> autoComplete());
+
+        customerName = new TextField();
+        customerName.setLayoutX(305);
+        customerName.setLayoutY(640);
+        customerName.setPrefWidth(480);
+        customerName.setPrefHeight(50);
+        customerName.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
+        customerName.setPromptText("Enter customer phone number");
+        customerName.setFocusTraversable(false);
+        customerName.setTooltip(new Tooltip("Enter customer phone number"));
+        customerName.setAlignment(Pos.CENTER);
+
+
+        root.getChildren().addAll(customerPhone, newCustomer, existingCustomer, customerName);
+    }
+
+    public void autoComplete() {
+        ControllerPartner controller = new ControllerPartner();
+        controller.getExisitingCustomerPhoneNo();
+        customerPhoneNo = controller.customerPhoneNo;
+        customerPhone.getEntries().addAll(customerPhoneNo);
+
+        if(customerPhone != null) {
+            customerName.setText("test");
+        }
+
     }
 
     public void createOrderBtn(){
-            createOrder = new Button("Create order");
-            createOrder.setLayoutX(305);
-            createOrder.setLayoutY(710);
-            createOrder.setPrefWidth(480);
-            createOrder.setPrefHeight(50);
-            createOrder.setStyle("-fx-background-color: #34ffb9");
-            createOrder.setFont(new Font(18));
+        createOrderBtn = new Button("Create order");
+        createOrderBtn.setLayoutX(305);
+        createOrderBtn.setLayoutY(710);
+        createOrderBtn.setPrefWidth(480);
+        createOrderBtn.setPrefHeight(50);
+        createOrderBtn.setStyle("-fx-background-color: #34ffb9");
+        createOrderBtn.setFont(new Font(18));
+        createOrderBtn.setOnAction(event -> createOrderInDB());
 
-            root.getChildren().addAll(createOrder);
+        root.getChildren().addAll(createOrderBtn);
     }
 
-    public void createLaundry(ImageView laundryName, String laundryURL,int laundryWidth, int laundryX, int laundryY, Label laundryLabel, String labelText, int labelX, int labelY){
-            laundryName = new ImageView(laundryURL);
-            laundryName.setFitWidth(laundryWidth);
-            laundryName.setLayoutX(laundryX);
-            laundryName.setLayoutY(laundryY);
-
-            laundryLabel = new Label(labelText);
-            laundryLabel.setLayoutX(labelX);
-            laundryLabel.setLayoutY(labelY);
-
-            root.getChildren().addAll(laundryName,laundryLabel);
+    public void createOrderInDB() {
+        if (newCustomer.isSelected()) {
+            System.out.println("Virker det?");
+            ControllerPartner controller = new ControllerPartner();
+            controller.createOrderNewCustomer(customerPhone.getText(), customerName.getText(), totalPrice.getText());
+        } else if (existingCustomer.isSelected()) {
+           autoComplete();
+        }
     }
 
-    public void laundryPrices(Label price,String priceText, int priceX, int priceY){
-            price = new Label(priceText);
-            price.setLayoutX(priceX);
-            price.setLayoutY(priceY);
 
-            root.getChildren().addAll(price);
-    }
 
     public void quantity(TextField quantity,Button quantityMinus,Button quantityPlus, int quantityX, int quantityY, int minusX, int minusY, int plusX, int plusY){
-            quantity = new TextField("0");
-            quantity.setLayoutX(quantityX);
-            quantity.setLayoutY(quantityY);
-            quantity.setPrefWidth(70);
-            quantity.setPrefHeight(30);
-            quantity.setFocusTraversable(false);
-            quantity.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-            quantity.setAlignment(Pos.CENTER);
+        quantity = new TextField("0");
+        quantity.setLayoutX(quantityX);
+        quantity.setLayoutY(quantityY);
+        quantity.setPrefWidth(70);
+        quantity.setPrefHeight(30);
+        quantity.setFocusTraversable(false);
+        quantity.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
+        quantity.setAlignment(Pos.CENTER);
 
-            quantityMinus = new Button("-");
-            quantityMinus.setLayoutX(minusX);
-            quantityMinus.setLayoutY(minusY);
-            quantityMinus.setPrefWidth(32);
-            quantityMinus.setStyle("-fx-background-color: #88ff85");
+        quantityMinus = new Button("-");
+        quantityMinus.setLayoutX(minusX);
+        quantityMinus.setLayoutY(minusY);
+        quantityMinus.setPrefWidth(32);
+        quantityMinus.setStyle("-fx-background-color: #88ff85");
 
-            quantityPlus = new Button("+");
-            quantityPlus.setLayoutX(plusX);
-            quantityPlus.setLayoutY(plusY);
-            quantityPlus.setPrefWidth(32);
-            quantityPlus.setStyle("-fx-background-color: #88ff85");
+        quantityPlus = new Button("+");
+        quantityPlus.setLayoutX(plusX);
+        quantityPlus.setLayoutY(plusY);
+        quantityPlus.setPrefWidth(32);
+        quantityPlus.setStyle("-fx-background-color: #88ff85");
 
-            quantityMinus(quantityMinus,quantity);
-            quantityPlus(quantityPlus,quantity);
 
-            root.getChildren().addAll(quantity,quantityMinus,quantityPlus);
+        root.getChildren().addAll(quantity,quantityMinus,quantityPlus);
     }
 
-    public void quantityPlus(Button plus, TextField quantity){
-
-            plus.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-
-                    count += 1;
-
-                    quantity.setText("" + count);
-
-                }
-            });
+    public void showRegister() {
+        try {
+            start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-    public void quantityMinus(Button minus, TextField quantity){
-            minus.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-
-                    count -= 1;
-
-                    quantity.setText("" + count);
-
-                }
-            });
-    }
-
-
-
 
 
 
 
 }
+
