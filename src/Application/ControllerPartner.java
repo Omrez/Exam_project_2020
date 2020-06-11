@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ControllerPartner {
-
     public ArrayList<Clothing> clothingArrayList;
     public ArrayList<String> customerPhoneNo;
     DB db = new DB();

@@ -1,11 +1,24 @@
 package Domain;
 
+/**
+ * The Partner class is used to create Partner objects. A partner/pickup point is a business.
+ */
 public class Partner {
 
+    String partnerID;
     String name;
     String email;
     String address;
     String phoneNo;
+
+    public String getPartnerID() {
+        return partnerID;
+    }
+
+    public void setPartnerID(String partnerID) {
+        this.partnerID = partnerID;
+    }
+
 
     public String getName() {
         return name;

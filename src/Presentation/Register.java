@@ -18,44 +18,52 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class Register extends Application {
-    Group root;
+/**
+ * The Register class is the UI where the Shop Assistant at the pickup Points create a customer order.
+ */
 
+public class Register extends Application {
     private int sceneWidth = 1200;
     private int sceneHeight = 900;
-    Stage primaryStage;
-    //private int count;
+    private Stage primaryStage;
     private ArrayList<Clothing> clothingArrayList;
     private ArrayList<String> customerPhoneNo;
-    TextField totalPrices = new TextField();
+    private TextField totalPrices = new TextField();
+    private TextField customerName;
+    private AutoInsertTextField customerPhone = new AutoInsertTextField();
+    private Button createOrderBtn;
+    private AnchorPane content;
+    private AnchorPane laundryInfo;
+    private Label totalPricePlaceholder;
+    private Label totalPrice;
+    final ToggleGroup radiobuttonGroup = new ToggleGroup();
+    private RadioButton newCustomer;
+    private RadioButton existingCustomer;
+    private Group root;
 
-    TextField customerName;
-    AutoInsertTextField customerPhone = new AutoInsertTextField();
-    Button createOrderBtn;
-
-    AnchorPane content;
-    AnchorPane laundryInfo;
-
-    Label totalPricePlaceholder;
-    Label totalPrice;
-
-    final ToggleGroup group = new ToggleGroup();
-    RadioButton newCustomer;
-    RadioButton existingCustomer;
-    int priceOfJeans = 70;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         sceneRoot();
-
         customerInfo();
         createOrderBtn();
-
         content();
-
-
     }
 
+    /**
+     * showRegister is used to load/open the Register UI from another class.
+     */
+    public void showRegister() {
+        try {
+            start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * sceneRoot is the root where the stage and scene is set and shown.
+     */
     public void sceneRoot(){
         primaryStage = new Stage();
         root = new Group();
@@ -75,33 +83,18 @@ public class Register extends Application {
         totalPrice.setFont(new Font(22));
         totalPrice.setTextFill(Color.CORAL);
 
-
-
         root.getChildren().addAll(totalPricePlaceholder,totalPrice);
     }
 
-    public void customerFields(TextField customer, int customerX, int customerY, String customerText, String toolTip){
-        //customer = new TextField();
-        customer.setPrefWidth(480);
-        customer.setPrefHeight(50);
-        customer.setLayoutX(customerX);
-        customer.setLayoutY(customerY);
-        customer.setPromptText(customerText);
-        customer.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-        customer.setFocusTraversable(false);
-        customer.setTooltip(new Tooltip(toolTip));
-        customer.setAlignment(Pos.CENTER);
-
-        root.getChildren().addAll(customer);
-    }
-
+    /**
+     * content is used to create the UI elements.
+     */
     public void content(){
         content = new AnchorPane();
         content.setLayoutX(305);
         content.setLayoutY(180);
         content.setPrefWidth(480);
         content.setPrefHeight(430);
-        //content.setStyle("-fx-background-color: blue;");
         ControllerPartner controller = new ControllerPartner();
         controller.getClothing();
         clothingArrayList = controller.clothingArrayList;
@@ -170,41 +163,55 @@ public class Register extends Application {
         root.getChildren().addAll(content,sp);
     }
 
+    /**
+     * minusQuanity is used every time the - button is clicked in the UI.
+     * It subtract the quantity of a clothing item.
+     * @param source is the TextField that is changed.
+     * @param clothing is the clothing object.
+     */
+
     private void minusQuantity(TextField source, Clothing clothing) {
         clothing.setCount(-1);
         int quantity = clothing.getCount();
-        double priceTest = 0;
+        double totalPriceOfClothing = 0;
 
         for (int i = 0; i < clothingArrayList.size(); i++) {
-            double test = clothingArrayList.get(i).getCount();
-            double test1 = clothingArrayList.get(i).getPrice();
-            priceTest += test1 * test;
+            double countOfItems = clothingArrayList.get(i).getCount();
+            double clothingPricePerUnit = Double.valueOf(clothingArrayList.get(i).getPrice());
+            totalPriceOfClothing += clothingPricePerUnit * countOfItems;
 
         }
         source.setText("" + (quantity));
-        totalPrices.setText("" + priceTest );
+        totalPrices.setText("" + totalPriceOfClothing );
 
     }
 
+    /**
+     * PlusQuantity is used every time the + button is clicked in the UI.
+     * It add to the quantity of a clothing item.
+     * @param source
+     * @param clothing
+     */
     private void plusQuantity(TextField source, Clothing clothing) {
-
         clothing.setCount(1);
         int quantity = clothing.getCount();
-        double priceTest = 0;
+        double totalPriceOfClothing = 0;
 
         for (int i = 0; i < clothingArrayList.size(); i++) {
-            double test = clothingArrayList.get(i).getCount();
-            double test1 = clothingArrayList.get(i).getPrice();
-            priceTest += test1 * test;
+            double countOfItems = clothingArrayList.get(i).getCount();
+            double clothingPricePerUnit = Double.valueOf(clothingArrayList.get(i).getPrice());
+            totalPriceOfClothing += countOfItems * clothingPricePerUnit;
 
         }
         source.setText("" + (quantity));
-        totalPrices.setText("" + priceTest);
+        totalPrices.setText("" + totalPriceOfClothing);
 
         totalPrice.textProperty().bind(totalPrices.textProperty());
-
-
     }
+
+    /**
+     * customerInfo creates the UI elements for creating a new order and inserting customer info
+     */
 
     public void customerInfo(){
         customerPhone.setLayoutX(305);
@@ -229,12 +236,12 @@ public class Register extends Application {
         });
 
         newCustomer = new RadioButton("New Customer");
-        newCustomer.setToggleGroup(group);
+        newCustomer.setToggleGroup(radiobuttonGroup);
         newCustomer.setSelected(true);
         newCustomer.setLayoutX(810);
         newCustomer.setLayoutY(100);
         existingCustomer = new RadioButton("Existing Customer");
-        existingCustomer.setToggleGroup(group);
+        existingCustomer.setToggleGroup(radiobuttonGroup);
         existingCustomer.setLayoutX(810);
         existingCustomer.setLayoutY(125);
         existingCustomer.setOnAction(event -> autoComplete());
@@ -266,6 +273,9 @@ public class Register extends Application {
 
     }
 
+    /**
+     * createOrderBtn creates a button and sets a button action.
+     */
     public void createOrderBtn(){
         createOrderBtn = new Button("Create order");
         createOrderBtn.setLayoutX(305);
@@ -279,6 +289,10 @@ public class Register extends Application {
         root.getChildren().addAll(createOrderBtn);
     }
 
+    /**
+     * createOrderInDB checks which radiobuttion is selected. If it is a new or existing customer,
+     * and get the data provided from the TextFields and inserts it into the database.
+     */
     public void createOrderInDB() {
         if (newCustomer.isSelected()) {
             System.out.println("Virker det?");
@@ -288,45 +302,6 @@ public class Register extends Application {
            autoComplete();
         }
     }
-
-
-
-    public void quantity(TextField quantity,Button quantityMinus,Button quantityPlus, int quantityX, int quantityY, int minusX, int minusY, int plusX, int plusY){
-        quantity = new TextField("0");
-        quantity.setLayoutX(quantityX);
-        quantity.setLayoutY(quantityY);
-        quantity.setPrefWidth(70);
-        quantity.setPrefHeight(30);
-        quantity.setFocusTraversable(false);
-        quantity.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-        quantity.setAlignment(Pos.CENTER);
-
-        quantityMinus = new Button("-");
-        quantityMinus.setLayoutX(minusX);
-        quantityMinus.setLayoutY(minusY);
-        quantityMinus.setPrefWidth(32);
-        quantityMinus.setStyle("-fx-background-color: #88ff85");
-
-        quantityPlus = new Button("+");
-        quantityPlus.setLayoutX(plusX);
-        quantityPlus.setLayoutY(plusY);
-        quantityPlus.setPrefWidth(32);
-        quantityPlus.setStyle("-fx-background-color: #88ff85");
-
-
-        root.getChildren().addAll(quantity,quantityMinus,quantityPlus);
-    }
-
-    public void showRegister() {
-        try {
-            start(primaryStage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
 
 }
 

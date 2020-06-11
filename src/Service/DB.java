@@ -4,26 +4,21 @@ import Domain.Clothing;
 import Domain.Driver;
 import Domain.Order;
 import Domain.Partner;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
-public class DB implements Initializable {
+/**
+ * The DB class is where the connection to the Database is made. It executes all database queries in the whole system.
+ */
+
+public class DB {
 
     String url = "jdbc:sqlserver://LAPTOP-EQK4SQO2\\SQLEXPRESS;databaseName=Dry_Cleaning_Service";
     String user = "sa";
     String password = "123456";
-
-    String type;
-    String price;
 
     String orderNumber;
     String orderDate;
@@ -33,46 +28,15 @@ public class DB implements Initializable {
     public String userPassword;
     public String accountType;
     public ArrayList<Order> OrderArrayList;
-    public ObservableList<Partner> partnerArrayList = FXCollections.observableArrayList();;
+    public ArrayList<Partner> partnerArrayList = new ArrayList<>();
     public ArrayList<Driver> driverArrayList;
     public ArrayList<Clothing> clothingArrayList;
     public ArrayList<String> phoneNoArrayList;
-    int index = 0;
 
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public String getOrderPrice() {
-        return orderPrice;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        partnerArrayList.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                System.out.println("Data invalidated");
-
-            }
-        });
-
-    }
-
-
-
+    /**
+     * checkLogin is used when a user wants to login to the system. It checks if the username and passwords are correct.
+     * @param sql
+     */
     public void checkLogin(String sql) {
 
         try {
@@ -84,8 +48,6 @@ public class DB implements Initializable {
             while (result.next()) {
                 username = result.getString("fldUsername");
                 userPassword = result.getString("fldPassword");
-                System.out.println(username);
-                System.out.println(userPassword);
 
             }
 
@@ -123,10 +85,10 @@ public class DB implements Initializable {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
-                price = result.getString("fldPrice");
                 Clothing clothing = new Clothing();
-                clothing.setPrice(Double.valueOf(result.getString("fldPrice")));
+                clothing.setPrice(result.getString("fldPrice"));
                 clothing.setType(result.getString("fldType"));
+                clothing.setClothingID(result.getString("fldLaundryPrice_id"));
                 clothingArrayList.add(clothing);
 
 
@@ -177,7 +139,7 @@ public class DB implements Initializable {
         return OrderArrayList;
     }
 
-    public ObservableList<Partner> getPartners() {
+    public ArrayList<Partner> getPartners() {
 
         String sql = "select * from tblPartner";
         try {
@@ -192,6 +154,7 @@ public class DB implements Initializable {
                 partner.setAddress(result.getString("fldAddress"));
                 partner.setPhoneNo(result.getString("fldPhone_no"));
                 partner.setEmail(result.getString("fldEmail"));
+                partner.setPartnerID(result.getString("fldPartner_id"));
                 partnerArrayList.add(partner);
                 //System.out.println(partnerArrayList);
 
@@ -219,6 +182,8 @@ public class DB implements Initializable {
                 Driver driver = new Driver();
                 driver.setName(result.getString("fldName"));
                 driver.setPhoneNo(result.getString("fldPhone_no"));
+                driver.setEmail(result.getString("fldEmail"));
+                driver.setDriverID(result.getString("fldDriver_id"));
                 driverArrayList.add(driver);
 
             }
@@ -324,6 +289,20 @@ public class DB implements Initializable {
         }
         return phoneNoArrayList;
     }
+
+    public void updateDBInfo(String sql){
+
+        try {
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
 
 

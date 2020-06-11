@@ -1,12 +1,25 @@
 package Domain;
 
+/**
+ * The Clothing class is used to create Clothing objects.
+ */
 public class Clothing {
 
     String type;
-    double price;
-    int count = 0;
+    String price;
+    String clothingID;
+    int count = 0; //count is used to keep track of how many items of this type is added when creating a new order.
 
-    public void setPrice(double price) {
+    public String getClothingID() {
+        return clothingID;
+    }
+
+    public void setClothingID(String clothingID) {
+        this.clothingID = clothingID;
+    }
+
+
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -24,8 +37,6 @@ public class Clothing {
         }
     }
 
-
-
     public void setType(String type) {
         this.type = type;
     }
@@ -34,12 +45,8 @@ public class Clothing {
         return type;
     }
 
-    public Double getPrice() {
+    public String getPrice() {
         return price;
     }
-
-
-
-
 
 }

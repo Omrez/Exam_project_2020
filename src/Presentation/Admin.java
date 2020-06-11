@@ -1,16 +1,17 @@
 package Presentation;
 
+import Domain.Clothing;
 import Domain.Driver;
 import Domain.Order;
 import Domain.Partner;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -22,64 +23,86 @@ import java.util.ArrayList;
 
 public class Admin extends Application {
 
-    AnchorPane root;
-    AnchorPane contentMenu;
-    AnchorPane showLaundry;
-    AnchorPane createLaundry;
+    private AnchorPane root;
+    private AnchorPane contentMenu;
+    private AnchorPane showLaundry;
+    private AnchorPane createLaundry;
     private AnchorPane showPartner;
-    AnchorPane createPartner;
-    AnchorPane showDriver;
-    AnchorPane createDriver;
-    AnchorPane showOrder;
+    private AnchorPane createPartner;
+    private AnchorPane showDriver;
+    private AnchorPane createDriver;
+    private AnchorPane showOrder;
 
-    Button backToMenu;
+    private Button backToMenu;
 
-    Button laundry;
-    Button drivers;
-    Button partner;
-    Button order;
-    Stage primaryStage;
+    private Button laundry;
+    private Button drivers;
+    private Button partner;
+    private Button order;
+    public Stage primaryStage;
 
-    Scene scene;
+    private TextField partnerEmail;
+    private TextField partnerAddress;
+    private TextField partnerPhone;
+    private TextField partnerCode;
+    private TextField partnerZipCity;
+    private PasswordField partnerPassword;
+    private Button submitPartner;
+    private TableView tableViewPartner = new TableView();
+    private TableView tableViewDriver = new TableView();
+    private TableView tableViewClothing = new TableView();
+
+    private Scene scene;
     private int sceneWidth = 1200;
     private int sceneHeight = 1000;
-    private ObservableList<Partner> partnerArrayList;
+    private ArrayList<Partner> partnerArrayList;
     public ArrayList<Driver> driverArrayList;
     private ArrayList<Order> orderArrayList;
+    private ArrayList<Clothing> clothingArrayList;
     private int size = 0;
+    private TextField partnerName;
+
     ControllerAdmin controller = new ControllerAdmin();
-
-
-
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         sceneRoot();
         menu();
-        //showLaundry();
-        //createLaundry();
-        //createButtons();
-
     }
 
-    public void createButtons(){
-        /*Button[] buttons = new Button[4];
+    /**
+     * sceneRoot is the root where the stage and scene is set and shown.
+     */
+    public void sceneRoot(){
+        primaryStage = new Stage();
 
-        for (int i = 0; i <4 ; i++) {
-            buttons[i] = new Button();
-            buttons[i].setLayoutX(100);
-            buttons[i].setLayoutY(i*140);
-            buttons[i].setPrefWidth(110);
-            buttons[i].setPrefHeight(110);
-
-            root.getChildren().addAll(buttons[i]);
-        }*/
+        root = new AnchorPane();
+        root.setStyle("-fx-background-color: #b8cfcc");
 
 
+        scene = new Scene(root,sceneWidth,sceneHeight);
 
+        primaryStage.setTitle("Dry Cleaning System");
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
+    /**
+     * showAdmin is used to load/open the Admin UI from another class.
+     */
+    public void showAdmin() {
+        try {
+            start(primaryStage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The menu method is used to create the UI Buttons and set Button actions.
+     */
     public void menu(){
         contentMenu = new AnchorPane();
         contentMenu.setPrefWidth(sceneWidth);
@@ -160,22 +183,68 @@ public class Admin extends Application {
 
     }
 
+    /**
+     * showLaundry method generates the UI and TableView for getting and updating laundry info.
+     */
     public void showLaundry(){
         showLaundry = new AnchorPane();
         showLaundry.setPrefWidth(600);
         showLaundry.setLayoutY(80);
         showLaundry.setPrefHeight(sceneHeight-80);
         showLaundry.setStyle("-fx-background-color: blue");
-
-        Label laundyLabel = new Label("All Laundry");
-        laundyLabel.setLayoutX(250);
-        laundyLabel.setLayoutY(50);
-
-
-        showLaundry.getChildren().addAll(laundyLabel);
         root.getChildren().addAll(showLaundry);
+        controller.getClothing();
+        clothingArrayList = controller.clothingArrayList;
+        createTableViewClothing();
     }
 
+    /**
+     * This method below creates a tableview and fills it with data from the Database.
+     */
+
+    public void createTableViewClothing() {
+        tableViewClothing.setEditable(true);
+        tableViewClothing.setPrefHeight(800);
+        tableViewClothing.setPrefWidth(600);
+
+        TableColumn<Clothing, String> columnClothingType = new TableColumn<>("Clothing type");
+        columnClothingType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnClothingType.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnClothingType.setOnEditCommit(event -> {
+            Clothing clothing = event.getRowValue();
+            clothing.setType(event.getNewValue());
+            controller.updateDBClothingType(clothing.getClothingID(), clothing.getType());
+
+        });
+
+        TableColumn<Clothing, String> columnClothingPrice = new TableColumn<>("Price");
+        columnClothingPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        columnClothingPrice.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnClothingPrice.setOnEditCommit(event -> {
+            Clothing clothing= event.getRowValue();
+            clothing.setPrice(event.getNewValue());
+            controller.updateDBClothingPrice(clothing.getClothingID(), String.valueOf(clothing.getPrice()));
+        });
+
+        //This if else statement below checks if tableViewClothing is already created.
+        if (!tableViewClothing.getColumns().isEmpty()) {
+
+        } else  {
+            tableViewClothing.getColumns().add(columnClothingType);
+            tableViewClothing.getColumns().add(columnClothingPrice);
+
+            for (int i = 0; i < clothingArrayList.size() ; i++) {
+                tableViewClothing.getItems().add(clothingArrayList.get(i));
+
+            }
+        }
+        showLaundry.getChildren().add(tableViewClothing);
+
+    }
+
+    /**
+     * createLaundry method creates the UI for creating new laundry types and prices in the system.
+     */
     public void createLaundry(){
         createLaundry = new AnchorPane();
         createLaundry.setPrefWidth(600);
@@ -226,23 +295,11 @@ public class Admin extends Application {
         root.getChildren().addAll(createLaundry);
     }
 
-    public void showPartner1(){
-        showPartner = new AnchorPane();
-        showPartner.setPrefWidth(600);
-        showPartner.setLayoutY(80);
-        showPartner.setPrefHeight(sceneHeight-80);
-        showPartner.setStyle("-fx-background-color: blue");
-
-
-        root.getChildren().addAll(showPartner);
-
-
-    }
-
-
+    /**
+     * showPartner method generates the UI and TableView for getting and updating partner info.
+     */
     public void showPartner() {
         showPartner = new AnchorPane();
-        //showPartnerVBox.setPadding(new Insets(100,10,0,10));
         showPartner.setPrefWidth(600);
         showPartner.setLayoutY(80);
         showPartner.setPrefHeight(sceneHeight-80);
@@ -250,96 +307,159 @@ public class Admin extends Application {
         root.getChildren().addAll(showPartner);
         controller.getPartners();
         partnerArrayList = controller.partnerArrayList;
+        createTableViewPartner();
+    }
 
-        TableView tableView = new TableView();
-        tableView.setEditable(true);
-        tableView.setPrefHeight(800);
-        tableView.setPrefWidth(600);
+    /**
+     * This method is run when the submitPartner button is clicked. It takes all info from the Fields provided
+     * by the Admin, and inserts it into the database. It also clears the Fields in the UI for easy typing of a new partner.
+     */
+    public void createPartnerDB() {
 
-        TableColumn<String, Partner> columnPartnerName = new TableColumn<>("Partner Name");
+        controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText());
+        controller.createUserAccountPartner(partnerEmail.getText(), partnerPassword.getText());
+        partnerArrayList.clear();
+        controller.getPartners();
+        partnerArrayList = controller.partnerArrayList;
+
+        partnerPhone.clear();
+        partnerAddress.clear();
+        partnerName.clear();
+        partnerPassword.clear();
+        partnerCode.clear();
+        partnerZipCity.clear();
+        partnerEmail.clear();
+    }
+
+    /**
+     * This method below creates a tableview and fills it with data from the Database.
+     */
+    public void createTableViewPartner() {
+
+        tableViewPartner.setEditable(true);
+        tableViewPartner.setPrefHeight(800);
+        tableViewPartner.setPrefWidth(600);
+
+        TableColumn<Partner, String> columnPartnerName = new TableColumn<>("Partner Name");
         columnPartnerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnPartnerName.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnPartnerName.setOnEditCommit(event -> {
+            Partner partner = event.getRowValue();
+            partner.setName(event.getNewValue());
+            controller.updateDBPartnerName(partner.getPartnerID(), partner.getName());
+            System.out.println(partner.getName());
+            System.out.println(partner.getPartnerID());
+        });
 
-
-        TableColumn<String, Partner> columnPartnerPhoneNo = new TableColumn<>("Partner PhoneNo");
+        TableColumn<Partner, String> columnPartnerPhoneNo = new TableColumn<>("Partner PhoneNo");
         columnPartnerPhoneNo.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
+        columnPartnerPhoneNo.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnPartnerPhoneNo.setOnEditCommit(event -> {
+            Partner partner = event.getRowValue();
+            partner.setPhoneNo(event.getNewValue());
+            controller.updateDBPartnerPhoneNo(partner.getPartnerID(), partner.getPhoneNo());
+            System.out.println(partner.getPartnerID());
+        });
+
+        TableColumn<Partner, String> columnPartnerEmail = new TableColumn<>("Email Address");
+        columnPartnerEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnPartnerEmail.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnPartnerEmail.setOnEditCommit(event -> {
+            Partner partner = event.getRowValue();
+            partner.setEmail(event.getNewValue());
+            controller.updateDBPartnerEmail(partner.getPartnerID(), partner.getEmail());
+            System.out.println(partner.getPartnerID());
+        });
+
+        TableColumn<Partner, String> columnPartnerAddress = new TableColumn<>("Address");
+        columnPartnerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        columnPartnerAddress.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnPartnerAddress.setOnEditCommit(event -> {
+            Partner partner = event.getRowValue();
+            partner.setAddress(event.getNewValue());
+            controller.updateDBPartnerAddress(partner.getPartnerID(), partner.getAddress());
+            System.out.println(partner.getPartnerID());
+        });
+
+        if (!tableViewPartner.getColumns().isEmpty()) {
+
+        } else  {
+            tableViewPartner.getColumns().add(columnPartnerName);
+            tableViewPartner.getColumns().add(columnPartnerPhoneNo);
+            tableViewPartner.getColumns().add(columnPartnerEmail);
+            tableViewPartner.getColumns().add(columnPartnerAddress);
 
 
-        tableView.getColumns().add(columnPartnerName);
-        tableView.getColumns().add(columnPartnerPhoneNo);
+            for (int i = 0; i < partnerArrayList.size() ; i++) {
+                tableViewPartner.getItems().add(partnerArrayList.get(i));
 
-        for (int i = 0; i < partnerArrayList.size() ; i++) {
-            tableView.getItems().add(partnerArrayList.get(i));
+            }
 
         }
-
-
-
-        showPartner.getChildren().add(tableView);
-
+        showPartner.getChildren().add(tableViewPartner);
 
     }
 
-    public void showPartnerWorking(){
-        showPartner = new AnchorPane();
-        //showPartnerVBox.setPadding(new Insets(100,10,0,10));
-        showPartner.setPrefWidth(600);
-        showPartner.setLayoutY(80);
-        showPartner.setPrefHeight(sceneHeight-80);
-        showPartner.setStyle("-fx-background-color: blue");
-        root.getChildren().addAll(showPartner);
-        controller.getPartners();
-        partnerArrayList = controller.partnerArrayList;
+    /**
+     * This method below creates a tableview and fills it with data from the Database.
+     */
+    public void createTableViewDriver() {
+        tableViewDriver.setEditable(true);
+        tableViewDriver.setPrefHeight(800);
+        tableViewDriver.setPrefWidth(600);
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(showPartner);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setPrefSize(600, sceneHeight-80);
-        scrollPane.setLayoutY(80);
-
-        root.getChildren().add(scrollPane);
-
-
-        for (int i = 0; i < partnerArrayList.size(); i++) {
-            AnchorPane partnerPane = new AnchorPane();
-            partnerPane.setPrefWidth(500);
-            partnerPane.setPrefHeight(70);
-            partnerPane.setLayoutX(40);
-            partnerPane.setLayoutY(size+=100);
-            partnerPane.setStyle("-fx-background-color: red");
-
-            Label partnerNameLabel = new Label("Partner name: " +partnerArrayList.get(i).getName());
-            partnerNameLabel.setLayoutX(10);
-            partnerNameLabel.setLayoutY(25);
-            partnerNameLabel.setTextFill(Color.BLACK);
-            partnerNameLabel.setFont(new Font(16));
-
-            /*Label partnerAddressLabel = new Label("Address: " + partnerArrayList.get(i).getAddress());
-            partnerAddressLabel.setLayoutX(70);
-            partnerAddressLabel.setLayoutY(25);
-            partnerAddressLabel.setTextFill(Color.BLACK);
-             */
-
-            Label partnerPhoneNoLabel = new Label("PhoneNO: " + partnerArrayList.get(i).getPhoneNo());
-            partnerPhoneNoLabel.setLayoutX(250);
-            partnerPhoneNoLabel.setLayoutY(25);
-            partnerPhoneNoLabel.setTextFill(Color.BLACK);
-
-           /* Label partnerEmailLabel = new Label("Email: " + partnerArrayList.get(i).getEmail());
-            partnerEmailLabel.setLayoutX(250);
-            partnerEmailLabel.setLayoutY(25);
-            partnerEmailLabel.setTextFill(Color.BLACK);
-
-            */
-
-            partnerPane.getChildren().addAll(partnerNameLabel, partnerPhoneNoLabel);
-            showPartner.getChildren().addAll(partnerPane);
+        TableColumn<Driver, String> columnDriverName = new TableColumn<>("Driver Name");
+        columnDriverName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnDriverName.setCellFactory(TextFieldTableCell.forTableColumn());
+        //columnPartnerName.setOnEditCommit(event -> updateCellInDB(TableColumn.CellEditEvent.ANY);
+        columnDriverName.setOnEditCommit(event -> {
+            Driver driver = event.getRowValue();
+            driver.setName(event.getNewValue());
+            controller.updateDBDriverName(driver.getDriverID(), driver.getName());
+        });
 
 
+
+        TableColumn<Driver, String> columnDriverPhoneNo = new TableColumn<>("Driver PhoneNo");
+        columnDriverPhoneNo.setCellValueFactory(new PropertyValueFactory<>("phoneNo"));
+        columnDriverPhoneNo.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnDriverPhoneNo.setOnEditCommit(event -> {
+            Driver driver = event.getRowValue();
+            driver.setPhoneNo(event.getNewValue());
+            controller.updateDBDriverPhoneNo(driver.getDriverID(), driver.getPhoneNo());
+        });
+
+        TableColumn<Driver, String> columnDriverEmail = new TableColumn<>("Email Address");
+        columnDriverEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnDriverEmail.setCellFactory(TextFieldTableCell.forTableColumn());
+        columnDriverEmail.setOnEditCommit(event -> {
+            Driver driver = event.getRowValue();
+            driver.setEmail(event.getNewValue());
+            controller.updateDBDriverEmail(driver.getDriverID(), driver.getEmail());
+        });
+
+
+        if (!tableViewDriver.getColumns().isEmpty()) {
+
+        } else  {
+            tableViewDriver.getColumns().add(columnDriverName);
+            tableViewDriver.getColumns().add(columnDriverPhoneNo);
+            tableViewDriver.getColumns().add(columnDriverEmail);
+
+
+            for (int i = 0; i < driverArrayList.size() ; i++) {
+                tableViewDriver.getItems().add(driverArrayList.get(i));
+
+            }
 
         }
-        size = 0;
+        showDriver.getChildren().add(tableViewDriver);
+
     }
 
+    /**
+     * The method createPartner creates the UI for creating a new partner, Fields and buttons.
+     */
     public void createPartner(){
         createPartner = new AnchorPane();
         createPartner.setPrefWidth(600);
@@ -348,7 +468,7 @@ public class Admin extends Application {
         createPartner.setLayoutX(600);
         createPartner.setStyle("-fx-background-color: orange");
 
-        TextField partnerName = new TextField();
+        partnerName = new TextField();
         partnerName.setPrefWidth(400);
         partnerName.setPrefHeight(70);
         partnerName.setLayoutX(100);
@@ -359,9 +479,10 @@ public class Admin extends Application {
         partnerName.setAlignment(Pos.CENTER);
         partnerName.setPromptText("Partner Name");
 
-        TextField partnerEmail = new TextField();
-        partnerEmail.setPrefWidth(400);
+
+        partnerEmail = new TextField();
         partnerEmail.setPrefHeight(70);
+        partnerEmail.setPrefWidth(400);
         partnerEmail.setLayoutX(100);
         partnerEmail.setLayoutY(200);
         partnerEmail.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
@@ -370,7 +491,8 @@ public class Admin extends Application {
         partnerEmail.setAlignment(Pos.CENTER);
         partnerEmail.setPromptText("Partner Email");
 
-        TextField partnerAddress = new TextField();
+
+        partnerAddress = new TextField();
         partnerAddress.setPrefWidth(400);
         partnerAddress.setPrefHeight(70);
         partnerAddress.setLayoutX(100);
@@ -381,7 +503,8 @@ public class Admin extends Application {
         partnerAddress.setAlignment(Pos.CENTER);
         partnerAddress.setPromptText("Partner Address");
 
-        TextField partnerPhone = new TextField();
+
+        partnerPhone = new TextField();
         partnerPhone.setPrefWidth(400);
         partnerPhone.setPrefHeight(70);
         partnerPhone.setLayoutX(100);
@@ -392,7 +515,8 @@ public class Admin extends Application {
         partnerPhone.setAlignment(Pos.CENTER);
         partnerPhone.setPromptText("Partner Phone Number");
 
-        TextField partnerCode = new TextField();
+
+        partnerCode = new TextField();
         partnerCode.setPrefWidth(400);
         partnerCode.setPrefHeight(70);
         partnerCode.setLayoutX(100);
@@ -403,7 +527,8 @@ public class Admin extends Application {
         partnerCode.setAlignment(Pos.CENTER);
         partnerCode.setPromptText("Partner code");
 
-        PasswordField partnerPassword = new PasswordField();
+
+        partnerPassword = new PasswordField();
         partnerPassword.setPrefWidth(400);
         partnerPassword.setPrefHeight(70);
         partnerPassword.setLayoutX(100);
@@ -413,7 +538,8 @@ public class Admin extends Application {
         partnerPassword.setAlignment(Pos.CENTER);
         partnerPassword.setPromptText("Partner Password");
 
-        TextField partnerZipCity = new TextField();
+
+        partnerZipCity = new TextField();
         partnerZipCity.setPrefWidth(400);
         partnerZipCity.setPrefHeight(70);
         partnerZipCity.setLayoutX(100);
@@ -424,57 +550,35 @@ public class Admin extends Application {
         partnerZipCity.setAlignment(Pos.CENTER);
         partnerZipCity.setPromptText("Partner Zip Code");
 
-        Button submitPartner = new Button("Create Partner");
+
+        submitPartner = new Button("Create Partner");
         submitPartner.setPrefWidth(400);
         submitPartner.setPrefHeight(70);
         submitPartner.setLayoutX(100);
         submitPartner.setLayoutY(800);
-        submitPartner.setOnAction(event -> controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText()));
+        submitPartner.setOnAction(event -> createPartnerDB());
         createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerCode, partnerPassword, partnerZipCity, submitPartner);
         root.getChildren().addAll(createPartner);
     }
 
-
+    /**
+     * showDriver method generates the UI and TableView for getting and updating driver info.
+     */
     public void showDriver(){
         showDriver = new AnchorPane();
         showDriver.setPrefWidth(600);
         showDriver.setLayoutY(80);
         showDriver.setPrefHeight(sceneHeight-80);
         showDriver.setStyle("-fx-background-color: blue");
+        root.getChildren().addAll(showDriver);
         controller.getDrivers();
         driverArrayList = controller.driverArrayList;
-
-        root.getChildren().addAll(showDriver);
-
-        for (int i = 0; i < driverArrayList.size(); i++) {
-            AnchorPane driverPane = new AnchorPane();
-            driverPane.setPrefWidth(500);
-            driverPane.setPrefHeight(70);
-            driverPane.setLayoutX(40);
-            driverPane.setLayoutY(size+=100);
-            driverPane.setStyle("-fx-background-color: red");
-
-            Label driverNameLabel = new Label("Partner name: " + driverArrayList.get(i).getName());
-            driverNameLabel.setLayoutX(10);
-            driverNameLabel.setLayoutY(25);
-            driverNameLabel.setTextFill(Color.BLACK);
-            driverNameLabel.setFont(new Font(16));
-
-
-            Label driverPhoneNoLabel = new Label("PhoneNO: " + driverArrayList.get(i).getPhoneNo());
-            driverPhoneNoLabel.setLayoutX(250);
-            driverPhoneNoLabel.setLayoutY(25);
-            driverPhoneNoLabel.setTextFill(Color.BLACK);
-
-            driverPane.getChildren().addAll(driverNameLabel, driverPhoneNoLabel);
-            showDriver.getChildren().addAll(driverPane);
-
-
-
-        }
-        size = 0;
+        createTableViewDriver();
     }
 
+    /**
+     * The method createDriver creates the UI for creating a new driver, Fields and buttons.
+     */
     public void createDriver(){
         createDriver = new AnchorPane();
         createDriver.setPrefWidth(600);
@@ -537,6 +641,9 @@ public class Admin extends Application {
         root.getChildren().addAll(createDriver);
     }
 
+    /**
+     * showOrder method generates the UI of orders. An easy way for the driver and admin to see orders created.
+     */
     public void showOrder(){
         showOrder = new AnchorPane();
         showOrder.setPrefWidth(sceneWidth);
@@ -591,28 +698,5 @@ public class Admin extends Application {
             orderPane.getChildren().addAll(namePlaceholder,citypPlaceholder,addressPlaceholder, orderNumberPlaceholder,orderDatePlaceholder);
         }
         size = 0;
-    }
-
-    public void sceneRoot(){
-        primaryStage = new Stage();
-
-        root = new AnchorPane();
-        root.setStyle("-fx-background-color: #b8cfcc");
-
-
-        scene = new Scene(root,sceneWidth,sceneHeight);
-
-        primaryStage.setTitle("Dry Cleaning System");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.show();
-    }
-
-    public void showAdmin() {
-        try {
-            start(primaryStage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
