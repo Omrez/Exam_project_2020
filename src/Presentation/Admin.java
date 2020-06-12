@@ -945,7 +945,7 @@ public class Admin extends Application {
             showOrder.getChildren().addAll(orderPane);
         }
         size = 0;
-        root.getChildren().addAll(orderPane, scrollPane);
+        root.getChildren().addAll(orderPane);
 
 
 
