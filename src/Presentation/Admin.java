@@ -9,6 +9,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -25,13 +29,13 @@ public class Admin extends Application {
 
     private AnchorPane root;
     private AnchorPane contentMenu;
-    private AnchorPane showLaundry;
-    private AnchorPane createLaundry;
-    private AnchorPane showPartner;
-    private AnchorPane createPartner;
-    private AnchorPane showDriver;
-    private AnchorPane createDriver;
-    private AnchorPane showOrder;
+    private AnchorPane showLaundry = new AnchorPane();;
+    private AnchorPane createLaundry = new AnchorPane();;
+    private AnchorPane showPartner = new AnchorPane();
+    private AnchorPane createPartner = new AnchorPane();;
+    private AnchorPane showDriver = new AnchorPane();;
+    private AnchorPane createDriver = new AnchorPane();;
+    private AnchorPane showOrder = new AnchorPane();;
 
     private Button backToMenu;
 
@@ -61,6 +65,13 @@ public class Admin extends Application {
     private ArrayList<Clothing> clothingArrayList;
     private int size = 0;
     private TextField partnerName;
+    private Button statistics;
+    private Button admins;
+    private AnchorPane showStatistics = new AnchorPane();
+    private AnchorPane showAdmins= new AnchorPane();
+    private AnchorPane createAdmins = new AnchorPane();
+    private ScrollPane scrollPane = new ScrollPane();
+    AnchorPane orderPane;
 
     ControllerAdmin controller = new ControllerAdmin();
 
@@ -103,41 +114,71 @@ public class Admin extends Application {
     /**
      * The menu method is used to create the UI Buttons and set Button actions.
      */
-    public void menu(){
+    public void menu() {
         contentMenu = new AnchorPane();
         contentMenu.setPrefWidth(sceneWidth);
-        contentMenu.setPrefHeight(sceneHeight-80);
+        contentMenu.setPrefHeight(sceneHeight - 80);
         contentMenu.setLayoutY(80);
-        contentMenu.setStyle("-fx-background-color: red");
+        contentMenu.setStyle("-fx-background-color: #b8cfcc");
 
         laundry = new Button("Laundry");
         laundry.setLayoutX(300);
         laundry.setLayoutY(200);
         laundry.setPrefHeight(150);
         laundry.setPrefWidth(180);
+        laundry.setStyle("-fx-background-color: #34ffb9");
+        laundry.setFont(new Font(18));
 
         partner = new Button("Partner");
         partner.setLayoutX(550);
         partner.setLayoutY(200);
         partner.setPrefHeight(150);
         partner.setPrefWidth(180);
+        partner.setStyle("-fx-background-color: #34ffb9");
+        partner.setFont(new Font(18));
 
         drivers = new Button("Driver");
         drivers.setLayoutX(300);
         drivers.setLayoutY(410);
         drivers.setPrefHeight(150);
         drivers.setPrefWidth(180);
+        drivers.setStyle("-fx-background-color: #34ffb9");
+        drivers.setFont(new Font(18));
 
         order = new Button("Order");
         order.setLayoutX(550);
         order.setLayoutY(410);
         order.setPrefHeight(150);
         order.setPrefWidth(180);
+        order.setStyle("-fx-background-color: #34ffb9");
+        order.setFont(new Font(18));
+
+        // Her er statics button
+        statistics = new Button("Show Statistics");
+        statistics.setLayoutX(800);
+        statistics.setLayoutY(200);
+        statistics.setPrefHeight(150);
+        statistics.setPrefWidth(180);
+        statistics.setStyle("-fx-background-color: #34ffb9");
+        statistics.setFont(new Font(18));
+
+
+        // Her er admin button
+        admins = new Button("Admin");
+        admins.setLayoutX(800);
+        admins.setLayoutY(410);
+        admins.setPrefHeight(150);
+        admins.setPrefWidth(180);
+        admins.setStyle("-fx-background-color: #34ffb9");
+        admins.setFont(new Font(18));
+
 
         laundry.setOnAction(e -> {
             showLaundry();
             createLaundry();
             contentMenu.setVisible(false);
+            showLaundry.setVisible(true);
+            createLaundry.setVisible(true);
             backToMenu();
         });
 
@@ -145,6 +186,8 @@ public class Admin extends Application {
             showPartner();
             createPartner();
             contentMenu.setVisible(false);
+            showPartner.setVisible(true);
+            createPartner.setVisible(true);
             backToMenu();
         });
 
@@ -152,18 +195,118 @@ public class Admin extends Application {
             showDriver();
             createDriver();
             contentMenu.setVisible(false);
+            showDriver.setVisible(true);
+            createDriver.setVisible(true);
             backToMenu();
         });
 
         order.setOnAction(e -> {
             showOrder();
             contentMenu.setVisible(false);
+            showOrder.setVisible(true);
+            backToMenu();
+        });
+        // static button ACTION
+        statistics.setOnAction(e -> {
+            showStatistics();
+            contentMenu.setVisible(false);
+            showStatistics.setVisible(true);
             backToMenu();
         });
 
-        contentMenu.getChildren().addAll(laundry,partner,drivers,order);
+        // Admin button ACTION
+        admins.setOnAction(e -> {
+            showAdmins();
+            createAdmins();
+            contentMenu.setVisible(false);
+            showAdmins.setVisible(true);
+            createAdmins.setVisible(true);
+            backToMenu();
+        });
+
+        contentMenu.getChildren().addAll(laundry,partner,drivers,order,statistics,admins);
         root.getChildren().addAll(contentMenu);
+
     }
+
+    public void createAdmins(){ // create admin method
+        createAdmins.setPrefWidth(600);
+        createAdmins.setPrefHeight(sceneHeight);
+        createAdmins.setLayoutY(80);
+        createAdmins.setLayoutX(620);
+        createAdmins.setStyle("-fx-background-color: orange");
+
+        Label adminCreate = new Label("Create Admin");
+        adminCreate.setLayoutX(270);
+        adminCreate.setLayoutY(50);
+        adminCreate.setFont(new Font(18));
+
+        if(root.getChildren().contains(createAdmins)) {
+
+        } else if (!root.getChildren().contains(createAdmins)){
+            createAdmins.getChildren().addAll(adminCreate);
+            root.getChildren().addAll(createAdmins);
+        }
+
+    }
+
+    public void showAdmins(){ // show admin method
+        showAdmins.setPrefWidth(620);
+        showAdmins.setLayoutY(80);
+        showAdmins.setPrefHeight(sceneHeight);
+        showAdmins.setStyle("-fx-background-color: blue");
+
+        Label allAdmins = new Label("All Admins");
+        allAdmins.setLayoutX(270);
+        allAdmins.setLayoutY(50);
+        allAdmins.setFont(new Font(18));
+
+        if (root.getChildren().contains(showAdmins)) {
+
+        } else if (!root.getChildren().contains(showAdmins)) {
+            showAdmins.getChildren().addAll(allAdmins);
+            root.getChildren().addAll(showAdmins);
+        }
+
+    }
+
+    public void showStatistics(){ // statics method
+        // showStatistics.setStyle("-fx-background-color: coral");
+        showStatistics.setPrefWidth(sceneWidth+20);
+        showStatistics.setPrefHeight(sceneHeight-60);
+        showStatistics.setLayoutY(80);
+        showStatistics.setStyle("-fx-background-color: #b8cfcc");
+
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Laundry");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Number of Orders");
+
+        BarChart barChart = new BarChart(xAxis, yAxis);
+        barChart.setLayoutX(300);
+        barChart.setLayoutY(150);
+        barChart.setPrefSize(600,600);
+
+        XYChart.Series dataSeries1 = new XYChart.Series();
+        dataSeries1.setName("2014");
+
+        dataSeries1.getData().add(new XYChart.Data("Desktop", 178));
+        dataSeries1.getData().add(new XYChart.Data("Phone"  , 65));
+        dataSeries1.getData().add(new XYChart.Data("Tablet"  , 23));
+
+
+        barChart.getData().add(dataSeries1);
+
+        if (root.getChildren().contains(showStatistics)) {
+
+        } else if (!root.getChildren().contains(showStatistics)) {
+            showStatistics.getChildren().addAll(barChart);
+            root.getChildren().addAll(showStatistics);
+        }
+
+    }
+
 
     public void backToMenu(){
         backToMenu = new Button("Back to Menu");
@@ -172,10 +315,13 @@ public class Admin extends Application {
         backToMenu.setPrefWidth(120);
         backToMenu.setPrefHeight(50);
 
+
         backToMenu.setOnAction(e -> {
 
             menu();
+            disableAll();
             backToMenu.setVisible(false);
+
 
         });
 
@@ -183,16 +329,87 @@ public class Admin extends Application {
 
     }
 
+    public void disableAll(){
+        if(showLaundry.getChildren().isEmpty()) {
+
+
+        } else if(!showLaundry.getChildren().isEmpty()) {
+            showLaundry.setVisible(false);
+        }
+
+        if(createLaundry.getChildren().isEmpty()) {
+
+
+        } else if(!showLaundry.getChildren().isEmpty()) {
+            createLaundry.setVisible(false);
+        }
+
+        if(showPartner.getChildren().isEmpty()) {
+
+
+        } else if(!showPartner.getChildren().isEmpty()) {
+            showPartner.setVisible(false);
+        }
+        if(createPartner.getChildren().isEmpty()) {
+
+
+        } else if(!createPartner.getChildren().isEmpty()) {
+            createPartner.setVisible(false);
+        }
+
+        if(showDriver.getChildren().isEmpty()) {
+
+        } else if(!showDriver.getChildren().isEmpty()) {
+            showDriver.setVisible(false);
+
+        }
+
+        if(createDriver.getChildren().isEmpty()) {
+
+
+        } else if(!createDriver.getChildren().isEmpty()) {
+            createDriver.setVisible(false);
+        }
+
+        if(showAdmins.getChildren().isEmpty()) {
+
+
+        } else if(!showAdmins.getChildren().isEmpty()) {
+            showAdmins.setVisible(false);
+        }
+
+        if(createAdmins.getChildren().isEmpty()) {
+
+        } else if(!createAdmins.getChildren().isEmpty()) {
+            createAdmins.setVisible(false);
+        }
+
+        if(showOrder.getChildren().isEmpty()) {
+
+
+        } else if(!showOrder.getChildren().isEmpty()) {
+            showOrder.setVisible(false);
+        }
+        if(showStatistics.getChildren().isEmpty()) {
+
+        } else if(!showStatistics.getChildren().isEmpty()) {
+            showStatistics.setVisible(false);
+        }
+    }
+
     /**
      * showLaundry method generates the UI and TableView for getting and updating laundry info.
      */
     public void showLaundry(){
-        showLaundry = new AnchorPane();
         showLaundry.setPrefWidth(600);
         showLaundry.setLayoutY(80);
         showLaundry.setPrefHeight(sceneHeight-80);
-        showLaundry.setStyle("-fx-background-color: blue");
-        root.getChildren().addAll(showLaundry);
+        showLaundry.setStyle("-fx-background-color: #b8cfcc");
+        if (root.getChildren().contains(showLaundry)) {
+
+        } else if (!root.getChildren().contains(showLaundry)) {
+            root.getChildren().addAll(showLaundry);
+        }
         controller.getClothing();
         clothingArrayList = controller.clothingArrayList;
         createTableViewClothing();
@@ -206,6 +423,7 @@ public class Admin extends Application {
         tableViewClothing.setEditable(true);
         tableViewClothing.setPrefHeight(800);
         tableViewClothing.setPrefWidth(600);
+
 
         TableColumn<Clothing, String> columnClothingType = new TableColumn<>("Clothing type");
         columnClothingType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -238,20 +456,23 @@ public class Admin extends Application {
 
             }
         }
-        showLaundry.getChildren().add(tableViewClothing);
 
+        if(showLaundry.getChildren().contains(tableViewClothing)) {
+
+        } else if(!showLaundry.getChildren().contains(tableViewClothing)) {
+            showLaundry.getChildren().add(tableViewClothing);
+        }
     }
 
     /**
      * createLaundry method creates the UI for creating new laundry types and prices in the system.
      */
     public void createLaundry(){
-        createLaundry = new AnchorPane();
         createLaundry.setPrefWidth(600);
         createLaundry.setPrefHeight(sceneHeight-80);
         createLaundry.setLayoutY(80);
         createLaundry.setLayoutX(600);
-        createLaundry.setStyle("-fx-background-color: orange");
+        //createLaundry.setStyle("-fx-background-color: orange");
 
         TextField laundryType = new TextField();
         laundryType.setPrefWidth(400);
@@ -290,21 +511,28 @@ public class Admin extends Application {
         submitLaundry.setPrefHeight(70);
         submitLaundry.setLayoutX(100);
         submitLaundry.setLayoutY(400);
+        submitLaundry.setStyle("-fx-background-color: #34ffb9");
 
-        createLaundry.getChildren().addAll(laundryType,laundryPrice,submitLaundry);
-        root.getChildren().addAll(createLaundry);
+        if(root.getChildren().contains(createLaundry)) {
+
+        } else if (!root.getChildren().contains(createLaundry)){
+            createLaundry.getChildren().addAll(laundryType,laundryPrice,submitLaundry);
+            root.getChildren().addAll(createLaundry);
+        }
     }
 
     /**
      * showPartner method generates the UI and TableView for getting and updating partner info.
      */
     public void showPartner() {
-        showPartner = new AnchorPane();
         showPartner.setPrefWidth(600);
         showPartner.setLayoutY(80);
         showPartner.setPrefHeight(sceneHeight-80);
-        showPartner.setStyle("-fx-background-color: blue");
-        root.getChildren().addAll(showPartner);
+        if (root.getChildren().contains(showPartner)) {
+
+        } else if (!root.getChildren().contains(showPartner)) {
+            root.getChildren().addAll(showPartner);
+        }
         controller.getPartners();
         partnerArrayList = controller.partnerArrayList;
         createTableViewPartner();
@@ -339,6 +567,7 @@ public class Admin extends Application {
         tableViewPartner.setEditable(true);
         tableViewPartner.setPrefHeight(800);
         tableViewPartner.setPrefWidth(600);
+        tableViewPartner.setLayoutY(90);
 
         TableColumn<Partner, String> columnPartnerName = new TableColumn<>("Partner Name");
         columnPartnerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -396,8 +625,11 @@ public class Admin extends Application {
             }
 
         }
-        showPartner.getChildren().add(tableViewPartner);
+        if(showPartner.getChildren().contains(tableViewPartner)) {
 
+        } else if(!showPartner.getChildren().contains(tableViewPartner)) {
+            showPartner.getChildren().add(tableViewPartner);
+        }
     }
 
     /**
@@ -407,6 +639,7 @@ public class Admin extends Application {
         tableViewDriver.setEditable(true);
         tableViewDriver.setPrefHeight(800);
         tableViewDriver.setPrefWidth(600);
+        tableViewDriver.setLayoutY(90);
 
         TableColumn<Driver, String> columnDriverName = new TableColumn<>("Driver Name");
         columnDriverName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -453,7 +686,12 @@ public class Admin extends Application {
             }
 
         }
-        showDriver.getChildren().add(tableViewDriver);
+
+        if(showDriver.getChildren().contains(tableViewDriver)) {
+
+        } else if(!showDriver.getChildren().contains(tableViewDriver)) {
+            showDriver.getChildren().add(tableViewDriver);
+        }
 
     }
 
@@ -461,12 +699,10 @@ public class Admin extends Application {
      * The method createPartner creates the UI for creating a new partner, Fields and buttons.
      */
     public void createPartner(){
-        createPartner = new AnchorPane();
         createPartner.setPrefWidth(600);
         createPartner.setPrefHeight(sceneHeight-80);
         createPartner.setLayoutY(80);
         createPartner.setLayoutX(600);
-        createPartner.setStyle("-fx-background-color: orange");
 
         partnerName = new TextField();
         partnerName.setPrefWidth(400);
@@ -556,21 +792,28 @@ public class Admin extends Application {
         submitPartner.setPrefHeight(70);
         submitPartner.setLayoutX(100);
         submitPartner.setLayoutY(800);
+        submitPartner.setStyle("-fx-background-color: #34ffb9");
         submitPartner.setOnAction(event -> createPartnerDB());
-        createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerCode, partnerPassword, partnerZipCity, submitPartner);
-        root.getChildren().addAll(createPartner);
+        if(root.getChildren().contains(createPartner)) {
+
+        } else if (!root.getChildren().contains(createPartner)){
+            createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerCode, partnerPassword, partnerZipCity, submitPartner);
+            root.getChildren().addAll(createPartner);
+        }
     }
 
     /**
      * showDriver method generates the UI and TableView for getting and updating driver info.
      */
     public void showDriver(){
-        showDriver = new AnchorPane();
         showDriver.setPrefWidth(600);
         showDriver.setLayoutY(80);
         showDriver.setPrefHeight(sceneHeight-80);
-        showDriver.setStyle("-fx-background-color: blue");
-        root.getChildren().addAll(showDriver);
+        if (root.getChildren().contains(showDriver)) {
+
+        } else if (!root.getChildren().contains(showDriver)) {
+            root.getChildren().addAll(showDriver);
+        }
         controller.getDrivers();
         driverArrayList = controller.driverArrayList;
         createTableViewDriver();
@@ -580,12 +823,10 @@ public class Admin extends Application {
      * The method createDriver creates the UI for creating a new driver, Fields and buttons.
      */
     public void createDriver(){
-        createDriver = new AnchorPane();
         createDriver.setPrefWidth(600);
         createDriver.setPrefHeight(sceneHeight-80);
         createDriver.setLayoutY(80);
         createDriver.setLayoutX(600);
-        createDriver.setStyle("-fx-background-color: orange");
 
         TextField driverName = new TextField();
         driverName.setPrefWidth(400);
@@ -637,35 +878,43 @@ public class Admin extends Application {
         submitDriver.setLayoutX(100);
         submitDriver.setLayoutY(500);
 
-        createDriver.getChildren().addAll(driverName,driverPhone,driverEmail,driverPassword,submitDriver);
-        root.getChildren().addAll(createDriver);
+        if(root.getChildren().contains(createDriver)) {
+
+        } else if (!root.getChildren().contains(createDriver)){
+            createDriver.getChildren().addAll(driverName,driverPhone,driverEmail,driverPassword,submitDriver);
+            root.getChildren().addAll(createDriver);
+        }
     }
 
     /**
      * showOrder method generates the UI of orders. An easy way for the driver and admin to see orders created.
      */
     public void showOrder(){
-        showOrder = new AnchorPane();
         showOrder.setPrefWidth(sceneWidth);
         showOrder.setLayoutY(80);
         showOrder.setPrefHeight(sceneHeight-80);
-        showOrder.setStyle("-fx-background-color: blue");
-
-        root.getChildren().addAll(showOrder);
+        showOrder.setStyle("-fx-background-color: #b8cfcc");
         controller.getOrder();
         orderArrayList = controller.orderInfo;
-        System.out.println(orderArrayList);
+        if (root.getChildren().contains(showOrder)) {
+
+        } else if (!root.getChildren().contains(showOrder)) {
+            root.getChildren().addAll(showOrder);
+        }
+
+        scrollPane.setPrefSize(sceneWidth, sceneHeight - 80);
+        scrollPane.setContent(showOrder);
+        scrollPane.setLayoutY(80);
 
         Label citypPlaceholder;
 
         for (int i = 0; i < orderArrayList.size(); i++) {
-
-            AnchorPane orderPane = new AnchorPane();
+            orderPane = new AnchorPane();
             orderPane.setPrefWidth(1120);
             orderPane.setPrefHeight(70);
             orderPane.setLayoutX(40);
             orderPane.setLayoutY(size += 100);
-            orderPane.setStyle("-fx-background-color: red");
+            orderPane.setStyle("-fx-background-color: #91b1ad");
 
             Label namePlaceholder = new Label("Partner name: " + orderArrayList.get(i).getPartnerName());
             namePlaceholder.setLayoutX(25);
@@ -692,11 +941,13 @@ public class Admin extends Application {
             orderDatePlaceholder.setLayoutX(960);
             orderDatePlaceholder.setLayoutY(25);
             orderDatePlaceholder.setTextFill(Color.BLACK);
-
-
-            showOrder.getChildren().addAll(orderPane);
             orderPane.getChildren().addAll(namePlaceholder,citypPlaceholder,addressPlaceholder, orderNumberPlaceholder,orderDatePlaceholder);
+            showOrder.getChildren().addAll(orderPane);
         }
         size = 0;
+        root.getChildren().addAll(orderPane, scrollPane);
+
+
+
     }
 }

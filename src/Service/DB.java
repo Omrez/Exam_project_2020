@@ -1,9 +1,7 @@
 package Service;
 
-import Domain.Clothing;
+import Domain.*;
 import Domain.Driver;
-import Domain.Order;
-import Domain.Partner;
 import javafx.fxml.Initializable;
 import java.net.URL;
 import java.sql.*;
@@ -32,6 +30,7 @@ public class DB {
     public ArrayList<Driver> driverArrayList;
     public ArrayList<Clothing> clothingArrayList;
     public ArrayList<String> phoneNoArrayList;
+    public ArrayList<PartnerEmployee> partnerEmployeeArrayList;
 
     /**
      * checkLogin is used when a user wants to login to the system. It checks if the username and passwords are correct.
@@ -290,6 +289,34 @@ public class DB {
         return phoneNoArrayList;
     }
 
+    public ArrayList<PartnerEmployee> getPartnerEmployee() {
+        partnerEmployeeArrayList = new ArrayList<>();
+
+        String sql = "select * from tblUserAccount where fldLoginType = '1'";
+        try {
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                PartnerEmployee partnerEmployee = new PartnerEmployee();
+                partnerEmployee.setUsername(result.getString("fldUsername"));
+                partnerEmployee.setPassword(result.getString("fldPassword"));
+                partnerEmployee.setPartnerEmployeeID(result.getString("fldUserAccount_id"));
+                partnerEmployeeArrayList.add(partnerEmployee);
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return partnerEmployeeArrayList;
+    }
+
+
+
     public void updateDBInfo(String sql){
 
         try {
@@ -302,7 +329,6 @@ public class DB {
             ex.printStackTrace();
         }
     }
-
 
 
 

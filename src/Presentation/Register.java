@@ -1,7 +1,6 @@
 package Presentation;
 
 import Application.*;
-import Domain.AutoInsertTextField;
 import Domain.Clothing;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +29,7 @@ public class Register extends Application {
     private ArrayList<String> customerPhoneNo;
     private TextField totalPrices = new TextField();
     private TextField customerName;
-    private AutoInsertTextField customerPhone = new AutoInsertTextField();
+    private TextField customerPhone = new TextField();
     private Button createOrderBtn;
     private AnchorPane content;
     private AnchorPane laundryInfo;
@@ -50,9 +49,9 @@ public class Register extends Application {
         content();
     }
 
-    /**
-     * showRegister is used to load/open the Register UI from another class.
-     */
+        /**
+         * showRegister is used to load/open the Register UI from another class.
+         */
     public void showRegister() {
         try {
             start(primaryStage);
@@ -71,14 +70,15 @@ public class Register extends Application {
         primaryStage.setTitle("Dry Cleaning System");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
 
         totalPricePlaceholder = new Label("Total Price: ");
         totalPricePlaceholder.setLayoutX(950);
         totalPricePlaceholder.setLayoutY(300);
         totalPricePlaceholder.setFont(new Font(22));
 
-        totalPrice = new Label("price");
-        totalPrice.setLayoutX(998);
+        totalPrice = new Label("0DKK");
+        totalPrice.setLayoutX(985);
         totalPrice.setLayoutY(350);
         totalPrice.setFont(new Font(22));
         totalPrice.setTextFill(Color.CORAL);
@@ -98,6 +98,7 @@ public class Register extends Application {
         ControllerPartner controller = new ControllerPartner();
         controller.getClothing();
         clothingArrayList = controller.clothingArrayList;
+        content.setStyle("-fx-background-color: #b8cfcc");
 
         ScrollPane sp = new ScrollPane();
         sp.setContent(content);
@@ -105,13 +106,14 @@ public class Register extends Application {
         sp.setLayoutY(180);
         sp.setPrefSize(480,430);
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setStyle("-fx-background-color: transparent");
 
         for (int i = 0; i < clothingArrayList.size(); i++) {
             laundryInfo = new AnchorPane();
             laundryInfo.setPrefWidth(480);
             laundryInfo.setPrefHeight(80);
             laundryInfo.setLayoutY(i*100);
-            laundryInfo.setStyle("-fx-background-color: red");
+            laundryInfo.setStyle("-fx-background-color: #91b1ad");
 
             ImageView logo = new ImageView("Presentation/images/" + clothingArrayList.get(i).getType() + ".png");
             logo.setLayoutY(5);
@@ -244,7 +246,6 @@ public class Register extends Application {
         existingCustomer.setToggleGroup(radiobuttonGroup);
         existingCustomer.setLayoutX(810);
         existingCustomer.setLayoutY(125);
-        existingCustomer.setOnAction(event -> autoComplete());
 
         customerName = new TextField();
         customerName.setLayoutX(305);
@@ -252,26 +253,15 @@ public class Register extends Application {
         customerName.setPrefWidth(480);
         customerName.setPrefHeight(50);
         customerName.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-        customerName.setPromptText("Enter customer phone number");
+        customerName.setPromptText("Enter customer name");
         customerName.setFocusTraversable(false);
-        customerName.setTooltip(new Tooltip("Enter customer phone number"));
+        customerName.setTooltip(new Tooltip("Enter customer name"));
         customerName.setAlignment(Pos.CENTER);
 
 
         root.getChildren().addAll(customerPhone, newCustomer, existingCustomer, customerName);
     }
 
-    public void autoComplete() {
-        ControllerPartner controller = new ControllerPartner();
-        controller.getExisitingCustomerPhoneNo();
-        customerPhoneNo = controller.customerPhoneNo;
-        customerPhone.getEntries().addAll(customerPhoneNo);
-
-        if(customerPhone != null) {
-            customerName.setText("test");
-        }
-
-    }
 
     /**
      * createOrderBtn creates a button and sets a button action.
@@ -298,8 +288,17 @@ public class Register extends Application {
             System.out.println("Virker det?");
             ControllerPartner controller = new ControllerPartner();
             controller.createOrderNewCustomer(customerPhone.getText(), customerName.getText(), totalPrice.getText());
+            Label successMessage = new Label("Order is created, an sms with invoice is sent to the customer");
+            successMessage.setLayoutX(305);
+            successMessage.setLayoutY(800);
+            successMessage.setTextFill(Color.CORAL);
+            root.getChildren().add(successMessage);
+
+
+            customerName.clear();
+            customerPhone.clear();
+
         } else if (existingCustomer.isSelected()) {
-           autoComplete();
         }
     }
 

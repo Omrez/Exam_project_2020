@@ -1,9 +1,11 @@
 package Presentation;
+import Domain.Partner;
 import Service.DB;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -50,8 +52,8 @@ public class Login extends Application {
         username = new TextField();
         username.setPrefWidth(310);
         username.setPrefHeight(50);
-        username.setLayoutX(460);
-        username.setLayoutY(300);
+        username.setLayoutX(50);
+        username.setLayoutY(100);
         username.setPromptText("Enter Username");
         username.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
         username.setFocusTraversable(false);
@@ -60,8 +62,8 @@ public class Login extends Application {
         password = new PasswordField();
         password.setPrefWidth(310);
         password.setPrefHeight(50);
-        password.setLayoutX(460);
-        password.setLayoutY(370);
+        password.setLayoutX(50);
+        password.setLayoutY(175);
         password.setPromptText("Enter Password");
         password.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
         password.setFocusTraversable(false);
@@ -70,19 +72,38 @@ public class Login extends Application {
         login = new Button("Login");
         login.setPrefWidth(310);
         login.setPrefHeight(50);
-        login.setLayoutX(460);
-        login.setLayoutY(470);
+        login.setLayoutX(50);
+        login.setLayoutY(250);
         login.setStyle("-fx-background-color: #34ffb9");
         login.setFont(new Font(18));
         login.setOnMouseClicked(event -> handleLogin());
 
         LoginErrorMessage = new Label();
         LoginErrorMessage.setTextFill(Color.RED);
-        LoginErrorMessage.setLayoutX(460);
-        LoginErrorMessage.setLayoutY(430);
+        LoginErrorMessage.setLayoutX(50);
+        LoginErrorMessage.setLayoutY(325);
         LoginErrorMessage.setVisible(false);
 
-        root.getChildren().addAll(username, LoginErrorMessage, password, login);
+        Label loginLabel = new Label("LOGIN");
+        loginLabel.setLayoutX(165);
+        loginLabel.setLayoutY(30);
+        loginLabel.setStyle("-fx-font-size: 20");
+        loginLabel.setTextFill(Color.WHITE);
+
+
+
+        AnchorPane loginInfoPane = new AnchorPane();
+        loginInfoPane.setPrefHeight(400);
+        loginInfoPane.setPrefWidth(400);
+        //loginInfoPane.setStyle("-fx-background-color: darkgreen");
+        loginInfoPane.setLayoutX(420);
+        loginInfoPane.setLayoutY(250);
+        //loginInfoPane.setStyle("-fx-border-radius: 400");
+        loginInfoPane.setStyle("-fx-background-color: #91b1ad;" + "-fx-background-radius: 30 ");
+
+
+        loginInfoPane.getChildren().addAll(loginLabel, username, LoginErrorMessage, password, login);
+        root.getChildren().add(loginInfoPane);
     }
 
     /**
@@ -114,6 +135,9 @@ public class Login extends Application {
                     register.showRegister();
                     break;
                 case "2": //Partner Admin(Boss at pickup point)
+                    loginStage.close();
+                    PartnerAdmin partnerAdmin = new PartnerAdmin();
+                    partnerAdmin.showPartnerAdmin();
 
                     break;
                 case "3": //Driver that pickup the laundry.

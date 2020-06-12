@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -63,7 +64,6 @@ public class DriverOrder extends Application {
         orderArrayList = controller.orderInfo;
         System.out.println(orderArrayList);
 
-
         Label citypPlaceholder;
 
         for (int i = 0; i < orderArrayList.size(); i++) {
@@ -73,7 +73,7 @@ public class DriverOrder extends Application {
             orderPane.setPrefHeight(70);
             orderPane.setLayoutX(40);
             orderPane.setLayoutY(size += 100);
-            orderPane.setStyle("-fx-background-color: red");
+            orderPane.setStyle("-fx-background-color: #91b1ad");
 
             Label namePlaceholder = new Label("Partner name: " + orderArrayList.get(i).getPartnerName());
             namePlaceholder.setLayoutX(25);

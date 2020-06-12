@@ -1,6 +1,7 @@
 package Application;
 
 import Domain.Clothing;
+import Domain.PartnerEmployee;
 import Service.DB;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Random;
 public class ControllerPartner {
     public ArrayList<Clothing> clothingArrayList;
     public ArrayList<String> customerPhoneNo;
+    public ArrayList<PartnerEmployee> partnerEmployees;
     DB db = new DB();
 
 
@@ -26,6 +28,9 @@ public class ControllerPartner {
         //String sql3 = "INSERT INTO [tblCustomerOrder] VALUES ('" +orderNumber +"', GETDATE(), '"+ totalPrice + "','"+customerID +"')";
         String sql4 = "INSERT INTO [tblOrder] VALUES ('"+orderNumber + "',GETDATE(),'"+ totalPrice + "','1')";
         db.createOrderNewCustomer(sql1, sql2, sql4, String.valueOf(orderNumber), totalPrice);
+        System.out.println("Dear " + name);
+        System.out.println("Thanks for your order " + orderNumber);
+        System.out.println("Total price is " + totalPrice);
 
     }
 
@@ -43,6 +48,21 @@ public class ControllerPartner {
 
     public void getExisitingCustomerPhoneNo() {
        customerPhoneNo = db.getAllPhoneNo();
+    }
+
+
+    public void getPartnerEmployee() {
+        partnerEmployees = db.getPartnerEmployee();
+    }
+
+    public void updateDBPartnerEmployeeUsername(String partnerEmployeeID, String username) {
+        String sql = "UPDATE tblUserAccount SET fldUsername = '"+ username + "'  WHERE fldUserAccount_id = '"+ partnerEmployeeID +"'";
+        db.updateDBInfo(sql);
+    }
+
+    public void updateDBPartnerEmployeePassword(String partnerEmployeeID, String password) {
+        String sql = "UPDATE tblUserAccount SET fldPassword = '"+ password + "'  WHERE fldUserAccount_id = '"+ partnerEmployeeID +"'";
+        db.updateDBInfo(sql);
     }
 
 
