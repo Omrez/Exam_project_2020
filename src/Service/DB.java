@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 
 public class DB {
 
-    String url = "jdbc:sqlserver://LAPTOP-EQK4SQO2\\SQLEXPRESS;databaseName=Dry_Cleaning_Service";
+    String url = "jdbc:sqlserver://LAPTOP-EQK4SQO2\\SQLEXPRESS;databaseName=Dry_Cleaning_Service2";
     String user = "sa";
     String password = "123456";
 
@@ -75,7 +75,7 @@ public class DB {
 
     public ArrayList<Clothing> getClothing() {
         clothingArrayList = new ArrayList<>();
-        String sql = "SELECT * FROM tblLaundryPrice";
+        String sql = "SELECT * FROM tblLaundry";
 
         try {
             Connection con = DriverManager.getConnection(url, user, password);
@@ -87,7 +87,7 @@ public class DB {
                 Clothing clothing = new Clothing();
                 clothing.setPrice(result.getString("fldPrice"));
                 clothing.setType(result.getString("fldType"));
-                clothing.setClothingID(result.getString("fldLaundryPrice_id"));
+                clothing.setClothingID(result.getString("fldLaundry_id"));
                 clothingArrayList.add(clothing);
 
 

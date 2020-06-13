@@ -35,15 +35,15 @@ public class ControllerAdmin {
         driverArrayList = db.getDrivers();
     }
 
-    public void createPartner(String name, String email, String address, String phoneNo, String code, String password, String zipCity ) {
-        String sql = "INSERT INTO [tblPartner] VALUES ('"+ name + "', '"+ email +"', '" + phoneNo +"','" + address + "','"+ code + "','" + password + "','" + zipCity + "')";
+    public void createPartner(String name, String email, String address, String phoneNo, String zipCity ) {
+        String sql = "INSERT INTO tblPartner VALUES ('"+ name + "', '"+ email +"', '" + address +"','" + phoneNo + "','" + zipCity + "')";
         db.createPartner(sql);
 
         partnerArrayList = db.getPartners();
     }
 
     public void createLaundry(String type, String price ) {
-        String sql = "INSERT INTO [tblLaundryPrice] VALUES ('"+ type + "', '"+ price +"')";
+        String sql = "INSERT INTO tblLaundry VALUES ('"+ type + "', '"+ price +"')";
         db.genericConnection(sql);
 
         clothingArrayList = db.getClothing();
@@ -95,12 +95,12 @@ public class ControllerAdmin {
     }
 
     public void updateDBClothingType(String clothingID, String type) {
-        String sql = "UPDATE tblLaundryPrice SET fldType = '"+ type + "'  WHERE fldLaundryPrice_id = '"+ clothingID +"'";
+        String sql = "UPDATE tblLaundry SET fldType = '"+ type + "'  WHERE fldLaundry_id = '"+ clothingID +"'";
         db.updateDBInfo(sql);
     }
 
     public void updateDBClothingPrice(String clothingID, String price) {
-        String sql = "UPDATE tblLaundryPrice SET fldPrice = '"+ price+ "'  WHERE fldLaundryPrice_id = '"+ clothingID +"'";
+        String sql = "UPDATE tblLaundry SET fldPrice = '"+ price+ "'  WHERE fldLaundry_id = '"+ clothingID +"'";
         db.updateDBInfo(sql);
     }
 

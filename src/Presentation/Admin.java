@@ -496,9 +496,6 @@ public class Admin extends Application {
         } else if(partnerPhone.getText().isEmpty()) {
             partnerPhone.setStyle("-fx-focus-color: RED");
             partnerPhone.requestFocus();
-        } else if(partnerCode.getText().isEmpty()) {
-            partnerCode.setStyle("-fx-focus-color: RED");
-            partnerCode.requestFocus();
         } else if(partnerPassword.getText().isEmpty()) {
             partnerPassword.setStyle("-fx-focus-color: RED");
             partnerPassword.requestFocus();
@@ -506,14 +503,13 @@ public class Admin extends Application {
             partnerZipCity.setStyle("-fx-focus-color: RED");
             partnerZipCity.requestFocus();
         } else {
-            controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText());
+            controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(), partnerZipCity.getText());
             controller.createUserAccountPartner(partnerEmail.getText(), partnerPassword.getText());
             createTableViewPartner();
             partnerPhone.clear();
             partnerAddress.clear();
             partnerName.clear();
             partnerPassword.clear();
-            partnerCode.clear();
             partnerZipCity.clear();
             partnerEmail.clear();
         }
@@ -743,23 +739,12 @@ public class Admin extends Application {
         partnerPhone.setPromptText("Partner Phone Number");
 
 
-        partnerCode = new TextField();
-        partnerCode.setPrefWidth(400);
-        partnerCode.setPrefHeight(70);
-        partnerCode.setLayoutX(100);
-        partnerCode.setLayoutY(500);
-        partnerCode.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
-        partnerCode.setFocusTraversable(false);
-        partnerCode.setTooltip(new Tooltip("Partner Code"));
-        partnerCode.setAlignment(Pos.CENTER);
-        partnerCode.setPromptText("Partner code");
-
 
         partnerPassword = new PasswordField();
         partnerPassword.setPrefWidth(400);
         partnerPassword.setPrefHeight(70);
         partnerPassword.setLayoutX(100);
-        partnerPassword.setLayoutY(600);
+        partnerPassword.setLayoutY(500);
         partnerPassword.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
         partnerPassword.setFocusTraversable(false);
         partnerPassword.setAlignment(Pos.CENTER);
@@ -770,7 +755,7 @@ public class Admin extends Application {
         partnerZipCity.setPrefWidth(400);
         partnerZipCity.setPrefHeight(70);
         partnerZipCity.setLayoutX(100);
-        partnerZipCity.setLayoutY(700);
+        partnerZipCity.setLayoutY(600);
         partnerZipCity.setStyle("-fx-focus-color: -fx-control-inner-background ; -fx-faint-focus-color: -fx-control-inner-background ; -fx-background-color: #eaebff; -fx-prompt-text-fill: gray");
         partnerZipCity.setFocusTraversable(false);
         partnerZipCity.setTooltip(new Tooltip("Partner Zip Code"));
@@ -782,14 +767,14 @@ public class Admin extends Application {
         submitPartner.setPrefWidth(400);
         submitPartner.setPrefHeight(70);
         submitPartner.setLayoutX(100);
-        submitPartner.setLayoutY(800);
+        submitPartner.setLayoutY(700);
         submitPartner.setStyle("-fx-background-color: #34ffb9");
         submitPartner.setOnAction(event -> createPartnerDB());
 
         if(root.getChildren().contains(createPartner) ) {
 
         } else if (!root.getChildren().contains(createPartner)){
-            createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerCode, partnerPassword, partnerZipCity, submitPartner);
+            createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerPassword, partnerZipCity, submitPartner);
             root.getChildren().addAll(createPartner);
         }
 
