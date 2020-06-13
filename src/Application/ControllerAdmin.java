@@ -8,6 +8,10 @@ import Service.DB;
 
 import java.util.ArrayList;
 
+/**
+ * This is the controller for the Admin class
+ */
+
 public class ControllerAdmin {
 
     public ArrayList<Partner> partnerArrayList;
@@ -46,7 +50,7 @@ public class ControllerAdmin {
     }
 
     public void createUserAccountPartner(String username, String password ) {
-        String sql = "INSERT INTO [tblUserAccount] VALUES ('"+ username + "', '"+ password +"', '2')";
+        String sql = "INSERT INTO [tblUserAccount] VALUES ('"+ username + "', '"+ password +"', '2', '0')";
         db.createPartner(sql);
 
     }

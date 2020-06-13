@@ -139,6 +139,7 @@ public class DB {
     }
 
     public ArrayList<Partner> getPartners() {
+        partnerArrayList = new ArrayList<>();
 
         String sql = "select * from tblPartner";
         try {
@@ -342,8 +343,6 @@ public class DB {
             ex.printStackTrace();
         }
     }
-
-
 
 
 }

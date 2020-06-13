@@ -285,18 +285,30 @@ public class Register extends Application {
      */
     public void createOrderInDB() {
         if (newCustomer.isSelected()) {
-            System.out.println("Virker det?");
-            ControllerPartner controller = new ControllerPartner();
-            controller.createOrderNewCustomer(customerPhone.getText(), customerName.getText(), totalPrice.getText());
-            Label successMessage = new Label("Order is created, an sms with invoice is sent to the customer");
-            successMessage.setLayoutX(305);
-            successMessage.setLayoutY(800);
-            successMessage.setTextFill(Color.CORAL);
-            root.getChildren().add(successMessage);
+
+            if(customerPhone.getText().isEmpty() ) {
+                customerPhone.setStyle("-fx-focus-color: RED");
+                customerPhone.requestFocus();
+            } else if(customerName.getText().isEmpty()) {
+                customerName.setStyle("-fx-focus-color: RED");
+                customerName.requestFocus();
+            } else {
+                ControllerPartner controller = new ControllerPartner();
+                controller.createOrderNewCustomer(customerPhone.getText(), customerName.getText(), totalPrice.getText());
+                Label successMessage = new Label("Order is created, an sms with invoice is sent to the customer");
+                successMessage.setLayoutX(305);
+                successMessage.setLayoutY(800);
+                successMessage.setTextFill(Color.CORAL);
+                root.getChildren().add(successMessage);
 
 
-            customerName.clear();
-            customerPhone.clear();
+                customerName.clear();
+                customerPhone.clear();
+
+            }
+
+
+
 
         } else if (existingCustomer.isSelected()) {
         }

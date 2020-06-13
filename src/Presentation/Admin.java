@@ -9,10 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -22,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Application.*;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -30,13 +25,13 @@ public class Admin extends Application {
 
     private AnchorPane root;
     private AnchorPane contentMenu;
-    private AnchorPane showLaundry = new AnchorPane();;
-    private AnchorPane createLaundry = new AnchorPane();;
+    private AnchorPane showLaundry = new AnchorPane();
+    private AnchorPane createLaundry = new AnchorPane();
     private AnchorPane showPartner = new AnchorPane();
-    private AnchorPane createPartner = new AnchorPane();;
-    private AnchorPane showDriver = new AnchorPane();;
-    private AnchorPane createDriver = new AnchorPane();;
-    private AnchorPane showOrder = new AnchorPane();;
+    private AnchorPane createPartner = new AnchorPane();
+    private AnchorPane showDriver = new AnchorPane();
+    private AnchorPane createDriver = new AnchorPane();
+    private AnchorPane showOrder = new AnchorPane();
 
     private Button backToMenu;
 
@@ -69,8 +64,6 @@ public class Admin extends Application {
     private Button statistics;
     private Button admins;
     private AnchorPane showStatistics = new AnchorPane();
-    private AnchorPane showAdmins= new AnchorPane();
-    private AnchorPane createAdmins = new AnchorPane();
     private ScrollPane scrollPane = new ScrollPane();
     private TextField laundryType = new TextField();
     private TextField laundryPrice = new TextField();
@@ -215,104 +208,9 @@ public class Admin extends Application {
             showOrder.setVisible(true);
             backToMenu();
         });
-        // static button ACTION
-        statistics.setOnAction(e -> {
-            showStatistics();
-            contentMenu.setVisible(false);
-            showStatistics.setVisible(true);
-            backToMenu();
-        });
 
-        // Admin button ACTION
-        admins.setOnAction(e -> {
-            showAdmins();
-            createAdmins();
-            contentMenu.setVisible(false);
-            showAdmins.setVisible(true);
-            createAdmins.setVisible(true);
-            backToMenu();
-        });
-
-        contentMenu.getChildren().addAll(laundry,partner,drivers,order,statistics,admins);
+        contentMenu.getChildren().addAll(laundry,partner,drivers,order);
         root.getChildren().addAll(contentMenu);
-
-    }
-
-    public void createAdmins(){ // create admin method
-        createAdmins.setPrefWidth(600);
-        createAdmins.setPrefHeight(sceneHeight);
-        createAdmins.setLayoutY(80);
-        createAdmins.setLayoutX(620);
-        createAdmins.setStyle("-fx-background-color: orange");
-
-        Label adminCreate = new Label("Create Admin");
-        adminCreate.setLayoutX(270);
-        adminCreate.setLayoutY(50);
-        adminCreate.setFont(new Font(18));
-
-        if(root.getChildren().contains(createAdmins)) {
-
-        } else if (!root.getChildren().contains(createAdmins)){
-            createAdmins.getChildren().addAll(adminCreate);
-            root.getChildren().addAll(createAdmins);
-        }
-
-    }
-
-    public void showAdmins(){ // show admin method
-        showAdmins.setPrefWidth(620);
-        showAdmins.setLayoutY(80);
-        showAdmins.setPrefHeight(sceneHeight);
-        showAdmins.setStyle("-fx-background-color: blue");
-
-        Label allAdmins = new Label("All Admins");
-        allAdmins.setLayoutX(270);
-        allAdmins.setLayoutY(50);
-        allAdmins.setFont(new Font(18));
-
-        if (root.getChildren().contains(showAdmins)) {
-
-        } else if (!root.getChildren().contains(showAdmins)) {
-            showAdmins.getChildren().addAll(allAdmins);
-            root.getChildren().addAll(showAdmins);
-        }
-
-    }
-
-    public void showStatistics(){ // statics method
-        // showStatistics.setStyle("-fx-background-color: coral");
-        showStatistics.setPrefWidth(sceneWidth+20);
-        showStatistics.setPrefHeight(sceneHeight-60);
-        showStatistics.setLayoutY(80);
-        showStatistics.setStyle("-fx-background-color: #b8cfcc");
-
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Laundry");
-
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Number of Orders");
-
-        BarChart barChart = new BarChart(xAxis, yAxis);
-        barChart.setLayoutX(300);
-        barChart.setLayoutY(150);
-        barChart.setPrefSize(600,600);
-
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("2014");
-
-        dataSeries1.getData().add(new XYChart.Data("Desktop", 178));
-        dataSeries1.getData().add(new XYChart.Data("Phone"  , 65));
-        dataSeries1.getData().add(new XYChart.Data("Tablet"  , 23));
-
-
-        barChart.getData().add(dataSeries1);
-
-        if (root.getChildren().contains(showStatistics)) {
-
-        } else if (!root.getChildren().contains(showStatistics)) {
-            showStatistics.getChildren().addAll(barChart);
-            root.getChildren().addAll(showStatistics);
-        }
 
     }
 
@@ -360,6 +258,7 @@ public class Admin extends Application {
         } else if(!showPartner.getChildren().isEmpty()) {
             showPartner.setVisible(false);
         }
+
         if(createPartner.getChildren().isEmpty()) {
 
 
@@ -381,18 +280,6 @@ public class Admin extends Application {
             createDriver.setVisible(false);
         }
 
-        if(showAdmins.getChildren().isEmpty()) {
-
-
-        } else if(!showAdmins.getChildren().isEmpty()) {
-            showAdmins.setVisible(false);
-        }
-
-        if(createAdmins.getChildren().isEmpty()) {
-
-        } else if(!createAdmins.getChildren().isEmpty()) {
-            createAdmins.setVisible(false);
-        }
 
         if(showOrder.getChildren().isEmpty()) {
 
@@ -400,11 +287,7 @@ public class Admin extends Application {
         } else if(!showOrder.getChildren().isEmpty()) {
             showOrder.setVisible(false);
         }
-        if(showStatistics.getChildren().isEmpty()) {
 
-        } else if(!showStatistics.getChildren().isEmpty()) {
-            showStatistics.setVisible(false);
-        }
     }
 
     /**
@@ -424,6 +307,7 @@ public class Admin extends Application {
         } else if (!root.getChildren().contains(showLaundry)) {
             root.getChildren().addAll(showLaundry);
         }
+
         createTableViewClothing();
     }
 
@@ -538,6 +422,8 @@ public class Admin extends Application {
         submitLaundry.setOnAction(event -> createLaundryDB());
 
         if(root.getChildren().contains(createLaundry)) {
+           //root.getChildren().remove(createLaundry);
+           // root.getChildren().add(createLaundry);
 
         } else if (!root.getChildren().contains(createLaundry)){
             createLaundry.getChildren().addAll(laundryType,laundryPrice,submitLaundry);
@@ -546,19 +432,45 @@ public class Admin extends Application {
     }
 
     public void createLaundryDB() {
-        controller.createLaundry(laundryType.getText(), laundryPrice.getText());
-        createTableViewClothing();
-        laundryType.clear();
-        laundryPrice.clear();
+        if(laundryType.getText().isEmpty() ) {
+            laundryType.setStyle("-fx-focus-color: RED");
+            laundryType.requestFocus();
+        } else if(laundryPrice.getText().isEmpty()) {
+            laundryPrice.setStyle("-fx-focus-color: RED");
+            laundryPrice.requestFocus();
+        } else {
+            controller.createLaundry(laundryType.getText(), laundryPrice.getText());
+            createTableViewClothing();
+            laundryType.clear();
+            laundryPrice.clear();
+
+        }
+
     }
 
     public void createDriverDB() {
-        controller.createDriver(driverName.getText(), driverEmail.getText(), driverPhone.getText(), driverPassword.getText());
-        createTableViewDriver();
-        driverName.clear();
-        driverPhone.clear();
-        driverEmail.clear();
-        driverPassword.clear();
+        if(driverName.getText().isEmpty() ) {
+            driverName.setStyle("-fx-focus-color: RED");
+            driverName.requestFocus();
+        } else if(driverEmail.getText().isEmpty()) {
+            driverEmail.setStyle("-fx-focus-color: RED");
+            driverEmail.requestFocus();
+        } else if(driverPhone.getText().isEmpty()) {
+            driverPhone.setStyle("-fx-focus-color: RED");
+            driverPhone.requestFocus();
+        } else if(driverPassword.getText().isEmpty()) {
+            driverPassword.setStyle("-fx-focus-color: RED");
+            driverPassword.requestFocus();
+        } else {
+            controller.createDriver(driverName.getText(), driverEmail.getText(), driverPhone.getText(), driverPassword.getText());
+            createTableViewDriver();
+            driverName.clear();
+            driverPhone.clear();
+            driverEmail.clear();
+            driverPassword.clear();
+
+        }
+
     }
 
     /**
@@ -571,7 +483,7 @@ public class Admin extends Application {
         controller.getPartners();
         partnerArrayList = controller.partnerArrayList;
         if (root.getChildren().contains(showPartner)) {
-            root.getChildren().clear();
+            root.getChildren().remove(showPartner);
             root.getChildren().add(showPartner);
             System.out.println("showpartner if kører");
 
@@ -608,7 +520,7 @@ public class Admin extends Application {
      * This method below creates a tableview and fills it with data from the Database.
      */
     public void createTableViewPartner() {
-
+        partnerArrayList = controller.partnerArrayList;
         tableViewPartner.setEditable(true);
         tableViewPartner.setPrefHeight(800);
         tableViewPartner.setPrefWidth(600);
@@ -621,8 +533,6 @@ public class Admin extends Application {
             Partner partner = event.getRowValue();
             partner.setName(event.getNewValue());
             controller.updateDBPartnerName(partner.getPartnerID(), partner.getName());
-            System.out.println(partner.getName());
-            System.out.println(partner.getPartnerID());
         });
 
         TableColumn<Partner, String> columnPartnerPhoneNo = new TableColumn<>("Partner PhoneNo");
@@ -632,7 +542,6 @@ public class Admin extends Application {
             Partner partner = event.getRowValue();
             partner.setPhoneNo(event.getNewValue());
             controller.updateDBPartnerPhoneNo(partner.getPartnerID(), partner.getPhoneNo());
-            System.out.println(partner.getPartnerID());
         });
 
         TableColumn<Partner, String> columnPartnerEmail = new TableColumn<>("Email Address");
@@ -642,7 +551,6 @@ public class Admin extends Application {
             Partner partner = event.getRowValue();
             partner.setEmail(event.getNewValue());
             controller.updateDBPartnerEmail(partner.getPartnerID(), partner.getEmail());
-            System.out.println(partner.getPartnerID());
         });
 
         TableColumn<Partner, String> columnPartnerAddress = new TableColumn<>("Address");
@@ -652,13 +560,13 @@ public class Admin extends Application {
             Partner partner = event.getRowValue();
             partner.setAddress(event.getNewValue());
             controller.updateDBPartnerAddress(partner.getPartnerID(), partner.getAddress());
-            System.out.println(partner.getPartnerID());
         });
 
         if (!tableViewPartner.getColumns().isEmpty()) {
             System.out.println("if kører");
-            tableViewPartner.getColumns().clear();
             tableViewPartner.getItems().clear();
+            tableViewPartner.getColumns().clear();
+
 
             tableViewPartner.getColumns().add(columnPartnerName);
             tableViewPartner.getColumns().add(columnPartnerPhoneNo);
@@ -991,10 +899,14 @@ public class Admin extends Application {
         controller.getOrder();
         orderArrayList = controller.orderInfo;
         if (root.getChildren().contains(showOrder)) {
+            root.getChildren().remove(showOrder);
+            root.getChildren().add(showOrder);
 
         } else if (!root.getChildren().contains(showOrder)) {
             root.getChildren().addAll(showOrder);
         }
+
+
 
         scrollPane.setPrefSize(sceneWidth, sceneHeight - 80);
         scrollPane.setContent(showOrder);
@@ -1039,7 +951,7 @@ public class Admin extends Application {
             showOrder.getChildren().addAll(orderPane);
         }
         size = 0;
-        root.getChildren().addAll(orderPane);
+        //root.getChildren().addAll(orderPane);
 
 
 

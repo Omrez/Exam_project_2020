@@ -1,5 +1,4 @@
 package Presentation;
-import Domain.Partner;
 import Service.DB;
 import javafx.application.Application;
 import javafx.scene.Group;

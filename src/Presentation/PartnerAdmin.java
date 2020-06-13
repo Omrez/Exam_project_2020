@@ -202,9 +202,19 @@ public class PartnerAdmin extends Application {
 
     public void createPartnerEmployeeDB() {
 
-        controller.createPartnerEmployee(username.getText(), password.getText());
-        createTableViewEmployee();
-        username.clear();
-        password.clear();
+        if(username.getText().isEmpty() ) {
+            username.setStyle("-fx-focus-color: RED");
+            username.requestFocus();
+        } else if(password.getText().isEmpty()) {
+            password.setStyle("-fx-focus-color: RED");
+            password.requestFocus();
+        } else {
+            controller.createPartnerEmployee(username.getText(), password.getText());
+            createTableViewEmployee();
+            username.clear();
+            password.clear();
+        }
+
+
     }
 }
