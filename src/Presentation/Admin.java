@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import Application.*;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -71,6 +72,14 @@ public class Admin extends Application {
     private AnchorPane showAdmins= new AnchorPane();
     private AnchorPane createAdmins = new AnchorPane();
     private ScrollPane scrollPane = new ScrollPane();
+    private TextField laundryType = new TextField();
+    private TextField laundryPrice = new TextField();
+
+    TextField driverName;
+    TextField driverPhone;
+    TextField driverEmail;
+    PasswordField driverPassword;
+    Button submitDriver;
     AnchorPane orderPane;
 
     ControllerAdmin controller = new ControllerAdmin();
@@ -314,6 +323,7 @@ public class Admin extends Application {
         backToMenu.setLayoutY(15);
         backToMenu.setPrefWidth(120);
         backToMenu.setPrefHeight(50);
+        backToMenu.setStyle("-fx-background-color: #34ffb9");
 
 
         backToMenu.setOnAction(e -> {
@@ -340,7 +350,7 @@ public class Admin extends Application {
         if(createLaundry.getChildren().isEmpty()) {
 
 
-        } else if(!showLaundry.getChildren().isEmpty()) {
+        } else if(!createLaundry.getChildren().isEmpty()) {
             createLaundry.setVisible(false);
         }
 
@@ -405,13 +415,15 @@ public class Admin extends Application {
         showLaundry.setLayoutY(80);
         showLaundry.setPrefHeight(sceneHeight-80);
         showLaundry.setStyle("-fx-background-color: #b8cfcc");
+        controller.getClothing();
+        clothingArrayList = controller.clothingArrayList;
         if (root.getChildren().contains(showLaundry)) {
+            root.getChildren().remove(showLaundry);
+            root.getChildren().add(showLaundry);
 
         } else if (!root.getChildren().contains(showLaundry)) {
             root.getChildren().addAll(showLaundry);
         }
-        controller.getClothing();
-        clothingArrayList = controller.clothingArrayList;
         createTableViewClothing();
     }
 
@@ -420,6 +432,7 @@ public class Admin extends Application {
      */
 
     public void createTableViewClothing() {
+        clothingArrayList = controller.clothingArrayList;
         tableViewClothing.setEditable(true);
         tableViewClothing.setPrefHeight(800);
         tableViewClothing.setPrefWidth(600);
@@ -446,6 +459,16 @@ public class Admin extends Application {
 
         //This if else statement below checks if tableViewClothing is already created.
         if (!tableViewClothing.getColumns().isEmpty()) {
+            tableViewClothing.getItems().clear();
+            tableViewClothing.getColumns().clear();
+            tableViewClothing.getColumns().add(columnClothingType);
+            tableViewClothing.getColumns().add(columnClothingPrice);
+
+            for (int i = 0; i < clothingArrayList.size() ; i++) {
+                tableViewClothing.getItems().add(clothingArrayList.get(i));
+
+            }
+
 
         } else  {
             tableViewClothing.getColumns().add(columnClothingType);
@@ -458,6 +481,8 @@ public class Admin extends Application {
         }
 
         if(showLaundry.getChildren().contains(tableViewClothing)) {
+            showLaundry.getChildren().clear();
+            showLaundry.getChildren().add(tableViewClothing);
 
         } else if(!showLaundry.getChildren().contains(tableViewClothing)) {
             showLaundry.getChildren().add(tableViewClothing);
@@ -474,7 +499,6 @@ public class Admin extends Application {
         createLaundry.setLayoutX(600);
         //createLaundry.setStyle("-fx-background-color: orange");
 
-        TextField laundryType = new TextField();
         laundryType.setPrefWidth(400);
         laundryType.setPrefHeight(70);
         laundryType.setLayoutX(100);
@@ -485,7 +509,6 @@ public class Admin extends Application {
         laundryType.setAlignment(Pos.CENTER);
         laundryType.setPromptText("Laundry Type");
 
-        TextField laundryPrice = new TextField();
         laundryPrice.setPrefWidth(400);
         laundryPrice.setPrefHeight(70);
         laundryPrice.setLayoutX(100);
@@ -512,6 +535,7 @@ public class Admin extends Application {
         submitLaundry.setLayoutX(100);
         submitLaundry.setLayoutY(400);
         submitLaundry.setStyle("-fx-background-color: #34ffb9");
+        submitLaundry.setOnAction(event -> createLaundryDB());
 
         if(root.getChildren().contains(createLaundry)) {
 
@@ -521,6 +545,22 @@ public class Admin extends Application {
         }
     }
 
+    public void createLaundryDB() {
+        controller.createLaundry(laundryType.getText(), laundryPrice.getText());
+        createTableViewClothing();
+        laundryType.clear();
+        laundryPrice.clear();
+    }
+
+    public void createDriverDB() {
+        controller.createDriver(driverName.getText(), driverEmail.getText(), driverPhone.getText(), driverPassword.getText());
+        createTableViewDriver();
+        driverName.clear();
+        driverPhone.clear();
+        driverEmail.clear();
+        driverPassword.clear();
+    }
+
     /**
      * showPartner method generates the UI and TableView for getting and updating partner info.
      */
@@ -528,14 +568,20 @@ public class Admin extends Application {
         showPartner.setPrefWidth(600);
         showPartner.setLayoutY(80);
         showPartner.setPrefHeight(sceneHeight-80);
-        if (root.getChildren().contains(showPartner)) {
-
-        } else if (!root.getChildren().contains(showPartner)) {
-            root.getChildren().addAll(showPartner);
-        }
         controller.getPartners();
         partnerArrayList = controller.partnerArrayList;
+        if (root.getChildren().contains(showPartner)) {
+            root.getChildren().clear();
+            root.getChildren().add(showPartner);
+            System.out.println("showpartner if kører");
+
+        } else if (!root.getChildren().contains(showPartner)) {
+            System.out.println("showpartner if else kører");
+            root.getChildren().add(showPartner);
+        }
         createTableViewPartner();
+
+
     }
 
     /**
@@ -543,13 +589,10 @@ public class Admin extends Application {
      * by the Admin, and inserts it into the database. It also clears the Fields in the UI for easy typing of a new partner.
      */
     public void createPartnerDB() {
+        System.out.println("knappen virker");
 
         controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText());
         controller.createUserAccountPartner(partnerEmail.getText(), partnerPassword.getText());
-        partnerArrayList.clear();
-        controller.getPartners();
-        partnerArrayList = controller.partnerArrayList;
-
         partnerPhone.clear();
         partnerAddress.clear();
         partnerName.clear();
@@ -557,6 +600,8 @@ public class Admin extends Application {
         partnerCode.clear();
         partnerZipCity.clear();
         partnerEmail.clear();
+        //createTableViewPartner();
+
     }
 
     /**
@@ -611,8 +656,24 @@ public class Admin extends Application {
         });
 
         if (!tableViewPartner.getColumns().isEmpty()) {
+            System.out.println("if kører");
+            tableViewPartner.getColumns().clear();
+            tableViewPartner.getItems().clear();
 
-        } else  {
+            tableViewPartner.getColumns().add(columnPartnerName);
+            tableViewPartner.getColumns().add(columnPartnerPhoneNo);
+            tableViewPartner.getColumns().add(columnPartnerEmail);
+            tableViewPartner.getColumns().add(columnPartnerAddress);
+
+
+            for (int i = 0; i < partnerArrayList.size() ; i++) {
+                tableViewPartner.getItems().add(partnerArrayList.get(i));
+
+            }
+
+
+        } else {
+            System.out.println("else kører");
             tableViewPartner.getColumns().add(columnPartnerName);
             tableViewPartner.getColumns().add(columnPartnerPhoneNo);
             tableViewPartner.getColumns().add(columnPartnerEmail);
@@ -625,17 +686,22 @@ public class Admin extends Application {
             }
 
         }
+
         if(showPartner.getChildren().contains(tableViewPartner)) {
+            showPartner.getChildren().clear();
+            showPartner.getChildren().add(tableViewPartner);
 
         } else if(!showPartner.getChildren().contains(tableViewPartner)) {
             showPartner.getChildren().add(tableViewPartner);
         }
+
     }
 
     /**
      * This method below creates a tableview and fills it with data from the Database.
      */
     public void createTableViewDriver() {
+        driverArrayList = controller.driverArrayList;
         tableViewDriver.setEditable(true);
         tableViewDriver.setPrefHeight(800);
         tableViewDriver.setPrefWidth(600);
@@ -644,7 +710,6 @@ public class Admin extends Application {
         TableColumn<Driver, String> columnDriverName = new TableColumn<>("Driver Name");
         columnDriverName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnDriverName.setCellFactory(TextFieldTableCell.forTableColumn());
-        //columnPartnerName.setOnEditCommit(event -> updateCellInDB(TableColumn.CellEditEvent.ANY);
         columnDriverName.setOnEditCommit(event -> {
             Driver driver = event.getRowValue();
             driver.setName(event.getNewValue());
@@ -673,6 +738,17 @@ public class Admin extends Application {
 
 
         if (!tableViewDriver.getColumns().isEmpty()) {
+            tableViewDriver.getItems().clear();
+            tableViewDriver.getColumns().clear();
+            tableViewDriver.getColumns().add(columnDriverName);
+            tableViewDriver.getColumns().add(columnDriverPhoneNo);
+            tableViewDriver.getColumns().add(columnDriverEmail);
+
+            for (int i = 0; i < driverArrayList.size() ; i++) {
+                tableViewDriver.getItems().add(driverArrayList.get(i));
+
+            }
+
 
         } else  {
             tableViewDriver.getColumns().add(columnDriverName);
@@ -688,12 +764,15 @@ public class Admin extends Application {
         }
 
         if(showDriver.getChildren().contains(tableViewDriver)) {
+            showDriver.getChildren().clear();
+            showDriver.getChildren().add(tableViewDriver);
 
         } else if(!showDriver.getChildren().contains(tableViewDriver)) {
             showDriver.getChildren().add(tableViewDriver);
         }
 
-    }
+
+}
 
     /**
      * The method createPartner creates the UI for creating a new partner, Fields and buttons.
@@ -794,29 +873,37 @@ public class Admin extends Application {
         submitPartner.setLayoutY(800);
         submitPartner.setStyle("-fx-background-color: #34ffb9");
         submitPartner.setOnAction(event -> createPartnerDB());
-        if(root.getChildren().contains(createPartner)) {
+
+        if(root.getChildren().contains(createPartner) ) {
 
         } else if (!root.getChildren().contains(createPartner)){
             createPartner.getChildren().addAll(partnerName,partnerEmail,partnerAddress,partnerPhone, partnerCode, partnerPassword, partnerZipCity, submitPartner);
             root.getChildren().addAll(createPartner);
         }
+
+
     }
 
     /**
      * showDriver method generates the UI and TableView for getting and updating driver info.
      */
-    public void showDriver(){
+    public void showDriver(){ //har ændret denne til samme som laundry
         showDriver.setPrefWidth(600);
         showDriver.setLayoutY(80);
         showDriver.setPrefHeight(sceneHeight-80);
+        controller.getDrivers();
+        driverArrayList = controller.driverArrayList;
         if (root.getChildren().contains(showDriver)) {
+            root.getChildren().remove(showDriver);
+            root.getChildren().add(showDriver);
 
         } else if (!root.getChildren().contains(showDriver)) {
             root.getChildren().addAll(showDriver);
         }
-        controller.getDrivers();
-        driverArrayList = controller.driverArrayList;
         createTableViewDriver();
+
+
+
     }
 
     /**
@@ -828,7 +915,8 @@ public class Admin extends Application {
         createDriver.setLayoutY(80);
         createDriver.setLayoutX(600);
 
-        TextField driverName = new TextField();
+
+        driverName = new TextField();
         driverName.setPrefWidth(400);
         driverName.setPrefHeight(70);
         driverName.setLayoutX(100);
@@ -839,7 +927,8 @@ public class Admin extends Application {
         driverName.setAlignment(Pos.CENTER);
         driverName.setPromptText("Driver Name");
 
-        TextField driverPhone = new TextField();
+
+        driverPhone = new TextField();
         driverPhone.setPrefWidth(400);
         driverPhone.setPrefHeight(70);
         driverPhone.setLayoutX(100);
@@ -850,7 +939,8 @@ public class Admin extends Application {
         driverPhone.setAlignment(Pos.CENTER);
         driverPhone.setPromptText("Driver Phone Number");
 
-        TextField driverEmail = new TextField();
+
+        driverEmail = new TextField();
         driverEmail.setPrefWidth(400);
         driverEmail.setPrefHeight(70);
         driverEmail.setLayoutX(100);
@@ -861,7 +951,8 @@ public class Admin extends Application {
         driverEmail.setAlignment(Pos.CENTER);
         driverEmail.setPromptText("Driver Email");
 
-        PasswordField driverPassword = new PasswordField();
+
+        driverPassword = new PasswordField();
         driverPassword.setPrefWidth(400);
         driverPassword.setPrefHeight(70);
         driverPassword.setLayoutX(100);
@@ -872,11 +963,14 @@ public class Admin extends Application {
         driverPassword.setAlignment(Pos.CENTER);
         driverPassword.setPromptText("Password");
 
-        Button submitDriver = new Button("Create Driver");
+        Button submitDriver;
+        submitDriver = new Button("Create Driver");
         submitDriver.setPrefWidth(400);
         submitDriver.setPrefHeight(70);
         submitDriver.setLayoutX(100);
         submitDriver.setLayoutY(500);
+        submitDriver.setStyle("-fx-background-color: #34ffb9");
+        submitDriver.setOnAction(event ->  createDriverDB());
 
         if(root.getChildren().contains(createDriver)) {
 

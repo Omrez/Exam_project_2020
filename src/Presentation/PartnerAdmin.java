@@ -1,7 +1,7 @@
 package Presentation;
 
 import Application.ControllerPartner;
-import Domain.Driver;
+import Domain.Clothing;
 import Domain.Partner;
 import Domain.PartnerEmployee;
 import javafx.application.Application;
@@ -22,15 +22,21 @@ public class PartnerAdmin extends Application {
     private Stage primaryStage;
 
     private AnchorPane menu;
-    private AnchorPane showEmployee;
-    private AnchorPane createEmployee;
+    private AnchorPane showEmployee = new AnchorPane();
+    private AnchorPane createEmployee = new AnchorPane();
     private TableView tableViewEmployee = new TableView();
 
     private int sceneWidth = 1200;
     private int sceneHeight = 900;
     private ArrayList<PartnerEmployee> partnerEmployeeArrayList;
-    ControllerPartner controller = new ControllerPartner();
 
+    private TextField username;
+    private PasswordField password;
+    private Button createEmployeeBtn;
+
+    private Partner partner;
+
+    ControllerPartner controller = new ControllerPartner();
 
 
     @Override
@@ -74,7 +80,6 @@ public class PartnerAdmin extends Application {
     }
 
     public void showEmployee(){
-        showEmployee = new AnchorPane();
         showEmployee.setPrefWidth(600);
         showEmployee.setLayoutY(80);
         showEmployee.setPrefHeight(sceneHeight);
@@ -87,6 +92,7 @@ public class PartnerAdmin extends Application {
     }
 
     public void createTableViewEmployee(){
+        partnerEmployeeArrayList = controller.partnerEmployees;
         tableViewEmployee.setEditable(true);
         tableViewEmployee.setPrefHeight(800);
         tableViewEmployee.setPrefWidth(600);
@@ -94,7 +100,6 @@ public class PartnerAdmin extends Application {
         TableColumn<PartnerEmployee, String> columnPartnerEmployeeUsername = new TableColumn<>("Employee Username");
         columnPartnerEmployeeUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         columnPartnerEmployeeUsername.setCellFactory(TextFieldTableCell.forTableColumn());
-        //columnPartnerName.setOnEditCommit(event -> updateCellInDB(TableColumn.CellEditEvent.ANY);
         columnPartnerEmployeeUsername.setOnEditCommit(event -> {
             PartnerEmployee partnerEmployee = event.getRowValue();
             partnerEmployee.setUsername(event.getNewValue());
@@ -115,6 +120,15 @@ public class PartnerAdmin extends Application {
 
 
         if (!tableViewEmployee.getColumns().isEmpty()) {
+            tableViewEmployee.getItems().clear();
+            tableViewEmployee.getColumns().clear();
+            tableViewEmployee.getColumns().add(columnPartnerEmployeeUsername);
+            tableViewEmployee.getColumns().add(columnPartnerEmployeePassword);
+
+            for (int i = 0; i < partnerEmployeeArrayList.size() ; i++) {
+                tableViewEmployee.getItems().add(partnerEmployeeArrayList.get(i));
+
+            }
 
         } else  {
             tableViewEmployee.getColumns().add(columnPartnerEmployeeUsername);
@@ -127,12 +141,17 @@ public class PartnerAdmin extends Application {
             }
 
         }
-        showEmployee.getChildren().add(tableViewEmployee);
 
+        if(showEmployee.getChildren().contains(tableViewEmployee)) {
+            showEmployee.getChildren().clear();
+            showEmployee.getChildren().add(tableViewEmployee);
+
+        } else if(!showEmployee.getChildren().contains(tableViewEmployee)) {
+            showEmployee.getChildren().add(tableViewEmployee);
+        }
     }
 
     public void createEmployee(){
-        createEmployee = new AnchorPane();
         createEmployee.setPrefWidth(620);
         createEmployee.setPrefHeight(sceneHeight);
         createEmployee.setLayoutY(80);
@@ -143,7 +162,7 @@ public class PartnerAdmin extends Application {
         createEmploy.setLayoutY(30);
         createEmploy.setFont(new Font(18));
 
-        TextField username = new TextField();
+        username = new TextField();
         username.setPrefWidth(400);
         username.setPrefHeight(70);
         username.setLayoutX(100);
@@ -155,7 +174,8 @@ public class PartnerAdmin extends Application {
         username.setPromptText("Username");
 
 
-        PasswordField password = new PasswordField();
+
+        password = new PasswordField();
         password.setPrefWidth(400);
         password.setPrefHeight(70);
         password.setLayoutX(100);
@@ -166,15 +186,25 @@ public class PartnerAdmin extends Application {
         password.setAlignment(Pos.CENTER);
         password.setPromptText("password");
 
-        Button createEmployeeBtn = new Button("Create Employee");
+
+        createEmployeeBtn = new Button("Create Employee");
         createEmployeeBtn.setPrefWidth(400);
         createEmployeeBtn.setPrefHeight(70);
         createEmployeeBtn.setLayoutX(100);
         createEmployeeBtn.setLayoutY(300);
         createEmployeeBtn.setStyle("-fx-background-color: #34ffb9");
         createEmployeeBtn.setFont(new Font(18));
+        createEmployeeBtn.setOnAction(event -> createPartnerEmployeeDB());
 
         createEmployee.getChildren().addAll(username,password,createEmploy,createEmployeeBtn);
         root.getChildren().addAll(createEmployee);
+    }
+
+    public void createPartnerEmployeeDB() {
+
+        controller.createPartnerEmployee(username.getText(), password.getText());
+        createTableViewEmployee();
+        username.clear();
+        password.clear();
     }
 }

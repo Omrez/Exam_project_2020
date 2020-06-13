@@ -40,6 +40,7 @@ public class DriverOrder extends Application {
         primaryStage.setTitle("Dry Cleaning System");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
 
     }
 

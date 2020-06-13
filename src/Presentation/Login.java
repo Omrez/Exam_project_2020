@@ -42,6 +42,7 @@ public class Login extends Application {
         loginStage.setTitle("Dry Cleaning System");
         loginStage.setScene(scene);
         loginStage.show();
+        loginStage.setResizable(false);
     }
 
     /**

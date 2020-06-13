@@ -65,6 +65,13 @@ public class ControllerPartner {
         db.updateDBInfo(sql);
     }
 
+    public void createPartnerEmployee(String username, String password) {
+        String sql = "INSERT INTO tblUserAccount VALUES ('"+username + "', '" + password+"', '1', '1')";
+        db.genericConnection(sql);
+
+        partnerEmployees = db.getPartnerEmployee();
+    }
+
 
 
 }

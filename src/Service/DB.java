@@ -208,6 +208,19 @@ public class DB {
         }
     }
 
+    public void genericConnection(String sql) {
+        try {
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
     public void createOrderNewCustomer(String sqlTblCustomer, String sqlFindCustomerID,  String sqlTblOrder, String orderNumber, String totalPrice) {
         try {
             String customerID = "";

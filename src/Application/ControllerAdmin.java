@@ -18,6 +18,7 @@ public class ControllerAdmin {
 
 
     public void getClothing() {
+
         clothingArrayList = db.getClothing();
     }
 
@@ -37,11 +38,17 @@ public class ControllerAdmin {
         partnerArrayList = db.getPartners();
     }
 
+    public void createLaundry(String type, String price ) {
+        String sql = "INSERT INTO [tblLaundryPrice] VALUES ('"+ type + "', '"+ price +"')";
+        db.genericConnection(sql);
+
+        clothingArrayList = db.getClothing();
+    }
+
     public void createUserAccountPartner(String username, String password ) {
         String sql = "INSERT INTO [tblUserAccount] VALUES ('"+ username + "', '"+ password +"', '2')";
         db.createPartner(sql);
 
-        partnerArrayList = db.getPartners();
     }
 
     public void getOrder(){
@@ -91,5 +98,14 @@ public class ControllerAdmin {
     public void updateDBClothingPrice(String clothingID, String price) {
         String sql = "UPDATE tblLaundryPrice SET fldPrice = '"+ price+ "'  WHERE fldLaundryPrice_id = '"+ clothingID +"'";
         db.updateDBInfo(sql);
+    }
+
+    public void createDriver(String name, String email, String phone, String password) {
+        String sql = "INSERT INTO tblDrivers VALUES ('"+ name + "', '"+ phone +"', '" + email+ "')";
+        String sql1 = "INSERT INTO tblUserAccount VALUES ('"+ email + "', '"+ password +"', '3', '0')";
+        db.genericConnection(sql);
+        db.genericConnection(sql1);
+
+        driverArrayList = db.getDrivers();
     }
 }
