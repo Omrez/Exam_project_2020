@@ -40,13 +40,13 @@ public class Admin extends Application {
     private Button partner;
     private Button order;
     public Stage primaryStage;
-
-    private TextField partnerEmail;
-    private TextField partnerAddress;
-    private TextField partnerPhone;
-    private TextField partnerCode;
-    private TextField partnerZipCity;
-    private PasswordField partnerPassword;
+    private TextField partnerName = new TextField();
+    private TextField partnerEmail = new TextField();
+    private TextField partnerAddress = new TextField();
+    private TextField partnerPhone = new TextField();
+    private TextField partnerCode=  new TextField();
+    private TextField partnerZipCity = new TextField();
+    private PasswordField partnerPassword = new PasswordField();
     private Button submitPartner;
     private TableView tableViewPartner = new TableView();
     private TableView tableViewDriver = new TableView();
@@ -60,7 +60,6 @@ public class Admin extends Application {
     private ArrayList<Order> orderArrayList;
     private ArrayList<Clothing> clothingArrayList;
     private int size = 0;
-    private TextField partnerName;
     private Button statistics;
     private Button admins;
     private AnchorPane showStatistics = new AnchorPane();
@@ -68,10 +67,10 @@ public class Admin extends Application {
     private TextField laundryType = new TextField();
     private TextField laundryPrice = new TextField();
 
-    TextField driverName;
-    TextField driverPhone;
-    TextField driverEmail;
-    PasswordField driverPassword;
+    TextField driverName = new TextField();
+    TextField driverPhone = new TextField();
+    TextField driverEmail = new TextField();
+    PasswordField driverPassword = new PasswordField();
     Button submitDriver;
     AnchorPane orderPane;
 
@@ -691,7 +690,6 @@ public class Admin extends Application {
         createPartner.setLayoutY(80);
         createPartner.setLayoutX(600);
 
-        partnerName = new TextField();
         partnerName.setPrefWidth(400);
         partnerName.setPrefHeight(70);
         partnerName.setLayoutX(100);
@@ -703,7 +701,6 @@ public class Admin extends Application {
         partnerName.setPromptText("Partner Name");
 
 
-        partnerEmail = new TextField();
         partnerEmail.setPrefHeight(70);
         partnerEmail.setPrefWidth(400);
         partnerEmail.setLayoutX(100);
@@ -715,7 +712,6 @@ public class Admin extends Application {
         partnerEmail.setPromptText("Partner Email");
 
 
-        partnerAddress = new TextField();
         partnerAddress.setPrefWidth(400);
         partnerAddress.setPrefHeight(70);
         partnerAddress.setLayoutX(100);
@@ -727,7 +723,6 @@ public class Admin extends Application {
         partnerAddress.setPromptText("Partner Address");
 
 
-        partnerPhone = new TextField();
         partnerPhone.setPrefWidth(400);
         partnerPhone.setPrefHeight(70);
         partnerPhone.setLayoutX(100);
@@ -740,7 +735,6 @@ public class Admin extends Application {
 
 
 
-        partnerPassword = new PasswordField();
         partnerPassword.setPrefWidth(400);
         partnerPassword.setPrefHeight(70);
         partnerPassword.setLayoutX(100);
@@ -751,7 +745,6 @@ public class Admin extends Application {
         partnerPassword.setPromptText("Partner Password");
 
 
-        partnerZipCity = new TextField();
         partnerZipCity.setPrefWidth(400);
         partnerZipCity.setPrefHeight(70);
         partnerZipCity.setLayoutX(100);
@@ -813,7 +806,6 @@ public class Admin extends Application {
         createDriver.setLayoutX(600);
 
 
-        driverName = new TextField();
         driverName.setPrefWidth(400);
         driverName.setPrefHeight(70);
         driverName.setLayoutX(100);
@@ -825,7 +817,6 @@ public class Admin extends Application {
         driverName.setPromptText("Driver Name");
 
 
-        driverPhone = new TextField();
         driverPhone.setPrefWidth(400);
         driverPhone.setPrefHeight(70);
         driverPhone.setLayoutX(100);
@@ -837,7 +828,6 @@ public class Admin extends Application {
         driverPhone.setPromptText("Driver Phone Number");
 
 
-        driverEmail = new TextField();
         driverEmail.setPrefWidth(400);
         driverEmail.setPrefHeight(70);
         driverEmail.setLayoutX(100);
@@ -849,7 +839,6 @@ public class Admin extends Application {
         driverEmail.setPromptText("Driver Email");
 
 
-        driverPassword = new PasswordField();
         driverPassword.setPrefWidth(400);
         driverPassword.setPrefHeight(70);
         driverPassword.setLayoutX(100);
