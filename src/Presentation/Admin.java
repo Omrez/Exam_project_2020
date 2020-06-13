@@ -155,25 +155,6 @@ public class Admin extends Application {
         order.setStyle("-fx-background-color: #34ffb9");
         order.setFont(new Font(18));
 
-        // Her er statics button
-        statistics = new Button("Show Statistics");
-        statistics.setLayoutX(800);
-        statistics.setLayoutY(200);
-        statistics.setPrefHeight(150);
-        statistics.setPrefWidth(180);
-        statistics.setStyle("-fx-background-color: #34ffb9");
-        statistics.setFont(new Font(18));
-
-
-        // Her er admin button
-        admins = new Button("Admin");
-        admins.setLayoutX(800);
-        admins.setLayoutY(410);
-        admins.setPrefHeight(150);
-        admins.setPrefWidth(180);
-        admins.setStyle("-fx-background-color: #34ffb9");
-        admins.setFont(new Font(18));
-
 
         laundry.setOnAction(e -> {
             showLaundry();
@@ -503,16 +484,39 @@ public class Admin extends Application {
     public void createPartnerDB() {
         System.out.println("knappen virker");
 
-        controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText());
-        controller.createUserAccountPartner(partnerEmail.getText(), partnerPassword.getText());
-        partnerPhone.clear();
-        partnerAddress.clear();
-        partnerName.clear();
-        partnerPassword.clear();
-        partnerCode.clear();
-        partnerZipCity.clear();
-        partnerEmail.clear();
-        //createTableViewPartner();
+        if(partnerName.getText().isEmpty() ) {
+            partnerName.setStyle("-fx-focus-color: RED");
+            partnerName.requestFocus();
+        } else if(partnerEmail.getText().isEmpty()) {
+            partnerEmail.setStyle("-fx-focus-color: RED");
+            partnerEmail.requestFocus();
+        } else if(partnerAddress.getText().isEmpty()) {
+            partnerAddress.setStyle("-fx-focus-color: RED");
+            partnerAddress.requestFocus();
+        } else if(partnerPhone.getText().isEmpty()) {
+            partnerPhone.setStyle("-fx-focus-color: RED");
+            partnerPhone.requestFocus();
+        } else if(partnerCode.getText().isEmpty()) {
+            partnerCode.setStyle("-fx-focus-color: RED");
+            partnerCode.requestFocus();
+        } else if(partnerPassword.getText().isEmpty()) {
+            partnerPassword.setStyle("-fx-focus-color: RED");
+            partnerPassword.requestFocus();
+        } else if(partnerZipCity.getText().isEmpty()) {
+            partnerZipCity.setStyle("-fx-focus-color: RED");
+            partnerZipCity.requestFocus();
+        } else {
+            controller.createPartner(partnerName.getText(), partnerEmail.getText(), partnerAddress.getText(), partnerPhone.getText(),partnerCode.getText(), partnerPassword.getText(), partnerZipCity.getText());
+            controller.createUserAccountPartner(partnerEmail.getText(), partnerPassword.getText());
+            createTableViewPartner();
+            partnerPhone.clear();
+            partnerAddress.clear();
+            partnerName.clear();
+            partnerPassword.clear();
+            partnerCode.clear();
+            partnerZipCity.clear();
+            partnerEmail.clear();
+        }
 
     }
 
