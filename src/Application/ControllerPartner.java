@@ -13,11 +13,21 @@ public class ControllerPartner {
     public ArrayList<PartnerEmployee> partnerEmployees;
     DB db = new DB();
 
+    /**
+     * getClothing method get info about clothing/laundry from DB class
+     */
 
     public void getClothing() {
         clothingArrayList = db.getClothing();
     }
 
+    /**
+     * createOrderNewCustomer method creates a new order for customer, into the database
+     *
+     * @param phoneNO
+     * @param name
+     * @param totalPrice
+     */
 
     public void createOrderNewCustomer(String phoneNO, String name, String totalPrice) {
         Random rnd = new Random();
@@ -50,20 +60,44 @@ public class ControllerPartner {
        customerPhoneNo = db.getAllPhoneNo();
     }
 
+    /**
+     * getPartnerEmployee method gets info about employee, from the DB class
+     */
 
     public void getPartnerEmployee() {
         partnerEmployees = db.getPartnerEmployee();
     }
+
+    /**
+     * updateDBPartnerEmployeeUsername method update a new employee name, and inserts in the database
+     *
+     * @param partnerEmployeeID
+     * @param username
+     */
 
     public void updateDBPartnerEmployeeUsername(String partnerEmployeeID, String username) {
         String sql = "UPDATE tblUserAccount SET fldUsername = '"+ username + "'  WHERE fldUserAccount_id = '"+ partnerEmployeeID +"'";
         db.updateDBInfo(sql);
     }
 
+    /**
+     * updateDBPartnerEmployeePassword method updates a new employee password, and inserts into the database
+     *
+     * @param partnerEmployeeID
+     * @param password
+     */
+
     public void updateDBPartnerEmployeePassword(String partnerEmployeeID, String password) {
         String sql = "UPDATE tblUserAccount SET fldPassword = '"+ password + "'  WHERE fldUserAccount_id = '"+ partnerEmployeeID +"'";
         db.updateDBInfo(sql);
     }
+
+    /**
+     * createPartnerEmployee method creates a new employee, and insert into user account in the database
+     *
+     * @param username
+     * @param password
+     */
 
     public void createPartnerEmployee(String username, String password) {
         String sql = "INSERT INTO tblUserAccount VALUES ('"+username + "', '" + password+"', '1', '1')";

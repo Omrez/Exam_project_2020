@@ -411,6 +411,10 @@ public class Admin extends Application {
         }
     }
 
+    /**
+     * createLaundryDB method inserts new created Laundry in the Database
+     */
+
     public void createLaundryDB() {
         if(laundryType.getText().isEmpty() ) {
             laundryType.setStyle("-fx-focus-color: RED");
@@ -427,6 +431,10 @@ public class Admin extends Application {
         }
 
     }
+
+    /**
+     * createDriverDB method inserts new created Drivers in the Database
+     */
 
     public void createDriverDB() {
         if(driverName.getText().isEmpty() ) {
@@ -465,10 +473,9 @@ public class Admin extends Application {
         if (root.getChildren().contains(showPartner)) {
             root.getChildren().remove(showPartner);
             root.getChildren().add(showPartner);
-            System.out.println("showpartner if kører");
 
         } else if (!root.getChildren().contains(showPartner)) {
-            System.out.println("showpartner if else kører");
+
             root.getChildren().add(showPartner);
         }
         createTableViewPartner();
@@ -481,7 +488,6 @@ public class Admin extends Application {
      * by the Admin, and inserts it into the database. It also clears the Fields in the UI for easy typing of a new partner.
      */
     public void createPartnerDB() {
-        System.out.println("knappen virker");
 
         if(partnerName.getText().isEmpty() ) {
             partnerName.setStyle("-fx-focus-color: RED");
@@ -562,7 +568,6 @@ public class Admin extends Application {
         });
 
         if (!tableViewPartner.getColumns().isEmpty()) {
-            System.out.println("if kører");
             tableViewPartner.getItems().clear();
             tableViewPartner.getColumns().clear();
 
@@ -580,7 +585,6 @@ public class Admin extends Application {
 
 
         } else {
-            System.out.println("else kører");
             tableViewPartner.getColumns().add(columnPartnerName);
             tableViewPartner.getColumns().add(columnPartnerPhoneNo);
             tableViewPartner.getColumns().add(columnPartnerEmail);
@@ -734,7 +738,6 @@ public class Admin extends Application {
         partnerPhone.setPromptText("Partner Phone Number");
 
 
-
         partnerPassword.setPrefWidth(400);
         partnerPassword.setPrefHeight(70);
         partnerPassword.setLayoutX(100);
@@ -777,7 +780,7 @@ public class Admin extends Application {
     /**
      * showDriver method generates the UI and TableView for getting and updating driver info.
      */
-    public void showDriver(){ //har ændret denne til samme som laundry
+    public void showDriver(){
         showDriver.setPrefWidth(600);
         showDriver.setLayoutY(80);
         showDriver.setPrefHeight(sceneHeight-80);
@@ -804,7 +807,6 @@ public class Admin extends Application {
         createDriver.setPrefHeight(sceneHeight-80);
         createDriver.setLayoutY(80);
         createDriver.setLayoutX(600);
-
 
         driverName.setPrefWidth(400);
         driverName.setPrefHeight(70);
@@ -885,10 +887,10 @@ public class Admin extends Application {
         }
 
 
-
-        scrollPane.setPrefSize(sceneWidth, sceneHeight - 80);
+        scrollPane.setPrefSize(sceneWidth, sceneHeight);
         scrollPane.setContent(showOrder);
         scrollPane.setLayoutY(80);
+
 
         Label citypPlaceholder;
 

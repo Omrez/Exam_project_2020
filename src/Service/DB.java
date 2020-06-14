@@ -14,9 +14,9 @@ import java.util.ResourceBundle;
 
 public class DB {
 
-    String url = "jdbc:sqlserver://LAPTOP-EQK4SQO2\\SQLEXPRESS;databaseName=Dry_Cleaning_Service2";
+    String url = "jdbc:sqlserver://LAPTOP-KLTD07BQ\\SQLEXPRESS;databaseName=Dry_Cleaning_Service";
     String user = "sa";
-    String password = "123456";
+    String password = "root";
 
     String orderNumber;
     String orderDate;
@@ -55,6 +55,12 @@ public class DB {
         }
     }
 
+    /**
+     * checkAccountType method checks the login type of user login, for partner,driver,admin,employee
+     *
+     * @param sql
+     */
+
     public void checkAccountType(String sql) {
 
         try {
@@ -72,6 +78,12 @@ public class DB {
             ex.printStackTrace();
         }
     }
+
+    /**
+     * getClothing method gets all the info about the clothing/laundry from database
+     *
+     * @return
+     */
 
     public ArrayList<Clothing> getClothing() {
         clothingArrayList = new ArrayList<>();
@@ -101,6 +113,12 @@ public class DB {
 
         return clothingArrayList;
     }
+
+    /**
+     * getOrder method gets the info about order, and partner from database
+     *
+     * @return
+     */
 
     public ArrayList<Order> getOrder(){
         OrderArrayList = new ArrayList<>();
@@ -138,6 +156,12 @@ public class DB {
         return OrderArrayList;
     }
 
+    /**
+     * getPartners method gets info about partner from the database
+     *
+     * @return
+     */
+
     public ArrayList<Partner> getPartners() {
         partnerArrayList = new ArrayList<>();
 
@@ -168,6 +192,12 @@ public class DB {
 
     }
 
+    /**
+     * getDrivers method gets the info about driver from the database
+     *
+     * @return
+     */
+
     public ArrayList<Driver> getDrivers() {
         driverArrayList = new ArrayList<>();
 
@@ -196,6 +226,12 @@ public class DB {
 
     }
 
+    /**
+     * createPartner method inserts partner in the database
+     *
+     * @param sql
+     */
+
     public void createPartner(String sql) {
 
         try {
@@ -209,6 +245,12 @@ public class DB {
         }
     }
 
+    /**
+     * genericConnection methos is a general connection, we use
+     *
+     * @param sql
+     */
+
     public void genericConnection(String sql) {
         try {
             Connection con = DriverManager.getConnection(url, user, password);
@@ -221,6 +263,16 @@ public class DB {
         }
 
     }
+
+    /**
+     * createOrderNewCustomer method inserts a new order into the Database
+     *
+     * @param sqlTblCustomer
+     * @param sqlFindCustomerID
+     * @param sqlTblOrder
+     * @param orderNumber
+     * @param totalPrice
+     */
 
     public void createOrderNewCustomer(String sqlTblCustomer, String sqlFindCustomerID,  String sqlTblOrder, String orderNumber, String totalPrice) {
         try {
@@ -280,6 +332,12 @@ public class DB {
         }
     }
 
+    /**
+     * getAllPhoneNo method gets customer phone number, from database
+     *
+     * @return
+     */
+
     public ArrayList<String> getAllPhoneNo(){
         phoneNoArrayList = new ArrayList<>();
         String phone;
@@ -302,6 +360,12 @@ public class DB {
         }
         return phoneNoArrayList;
     }
+
+    /**
+     * getPartnerEmployee method gets the login info about employee, from the database
+     *
+     * @return
+     */
 
     public ArrayList<PartnerEmployee> getPartnerEmployee() {
         partnerEmployeeArrayList = new ArrayList<>();
@@ -329,7 +393,11 @@ public class DB {
         return partnerEmployeeArrayList;
     }
 
-
+    /**
+     * updateDBInfo method is a general update method, and updates in the database
+     *
+     * @param sql
+     */
 
     public void updateDBInfo(String sql){
 

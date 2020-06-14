@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="mssql-jdbc-8.2.2.jre8">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/mssql-jdbc-8.2.2.jre8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Computer Science/MSSQL_mysql_driver_8.2/enu/mssql-jdbc-8.2.2.jre8.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

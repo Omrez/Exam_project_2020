@@ -56,6 +56,10 @@ public class PartnerAdmin extends Application {
         }
     }
 
+    /**
+     * sceneRoot is the root where the stage and scene is set and shown.
+     */
+
     public void sceneRoot(){
         primaryStage = new Stage();
 
@@ -71,6 +75,10 @@ public class PartnerAdmin extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Menu is a method that creates a menu in the UI where e.g. Buttons can be inserted
+     */
+
     public void menu(){
         menu = new AnchorPane();
         menu.setPrefWidth(sceneWidth+20);
@@ -78,6 +86,10 @@ public class PartnerAdmin extends Application {
 
         root.getChildren().addAll(menu);
     }
+
+    /**
+     * showEmployee method shows all employees in the UI
+     */
 
     public void showEmployee(){
         showEmployee.setPrefWidth(600);
@@ -90,6 +102,10 @@ public class PartnerAdmin extends Application {
         createTableViewEmployee();
 
     }
+
+    /**
+     * createTableViewEmployee method creates a tableview that shows all the employee
+     */
 
     public void createTableViewEmployee(){
         partnerEmployeeArrayList = controller.partnerEmployees;
@@ -151,6 +167,10 @@ public class PartnerAdmin extends Application {
         }
     }
 
+    /**
+     * createEmployee method is the UI for creating a new employee
+     */
+
     public void createEmployee(){
         createEmployee.setPrefWidth(620);
         createEmployee.setPrefHeight(sceneHeight);
@@ -199,6 +219,10 @@ public class PartnerAdmin extends Application {
         createEmployee.getChildren().addAll(username,password,createEmploy,createEmployeeBtn);
         root.getChildren().addAll(createEmployee);
     }
+
+    /**
+     * createPartnerEmployeeDB method inserts a new employee in the Database
+     */
 
     public void createPartnerEmployeeDB() {
 
