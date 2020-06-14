@@ -300,7 +300,7 @@ public class Register extends Application {
                 successMessage.setLayoutY(800);
                 successMessage.setTextFill(Color.CORAL);
                 root.getChildren().add(successMessage);
-
+                content();
 
                 customerName.clear();
                 customerPhone.clear();

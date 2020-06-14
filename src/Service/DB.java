@@ -14,9 +14,9 @@ import java.util.ResourceBundle;
 
 public class DB {
 
-    String url = "jdbc:sqlserver://LAPTOP-KLTD07BQ\\SQLEXPRESS;databaseName=Dry_Cleaning_Service";
+    String url = "jdbc:sqlserver://LAPTOP-EQK4SQO2\\SQLEXPRESS;databaseName=Dry_Cleaning_Service2";
     String user = "sa";
-    String password = "root";
+    String password = "123456";
 
     String orderNumber;
     String orderDate;
